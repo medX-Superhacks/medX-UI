@@ -23,7 +23,7 @@ export default function RootLayout({
     );
     return (
         <html lang="en">
-            <body className={inter.className}>
+            <body className={`${inter.className} container mx-auto text-black`}>
                 <Providers initialState={initialState}>{children}</Providers>
             </body>
         </html>
