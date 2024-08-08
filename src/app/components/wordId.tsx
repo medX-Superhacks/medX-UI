@@ -23,11 +23,12 @@ const WordId = () => {
     const onSuccess = () => {
         console.log('Success');
     };
-
+    const app_id: any = process.env.NEXT_PUBLIC_WORLDCOIN_APP_ID;
+    const action: any = process.env.NEXT_PUBLIC_WORLDCOIN_ACTION;
     return (
         <IDKitWidget
-            app_id="app_staging_62f680c2d99158b6224e1be22d651fe6"
-            action="medx-onboarding"
+            app_id={app_id}
+            action={action}
             verification_level={VerificationLevel.Device}
             handleVerify={handleVerify}
             onSuccess={onSuccess}
