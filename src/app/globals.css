@@ -10,6 +10,15 @@
 .text-fg-primary {
     color: black !important;
 }
+.input {
+    background-color: transparent !important;
+}
+.fill-fg-primary {
+    fill: black !important;
+}
+.btn-primary {
+    background: linear-gradient(91.11deg, #84dfdd -0.97%, #157d7a 167.27%);
+}
 @media (prefers-color-scheme: dark) {
     :root {
         --foreground-rgb: 255, 255, 255;
