@@ -13,7 +13,7 @@ import SwiperImage3 from '../../public/assets/swiper-3.png';
 import SlightFlip from './components/ui/SlightFlip';
 export default function Home() {
     const searchParams = useSearchParams();
-    const searchId = searchParams.get('orgId');
+    const searchId = searchParams?.get('orgId');
     const router = useRouter();
     const { address, isLoadingAccount } = useAccount({
         type: 'LightAccount',
