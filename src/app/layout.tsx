@@ -5,6 +5,7 @@ import { Providers } from './providers';
 import { config } from './config';
 import { headers } from 'next/headers';
 import { cookieToInitialState } from '@account-kit/core';
+import Navbar from './components/Navbar';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
@@ -23,7 +24,8 @@ export default function RootLayout({
     );
     return (
         <html lang="en">
-            <body className={`${inter.className} container mx-auto text-black`}>
+            <body className={`${inter.className}  text-black`}>
+                <Navbar />
                 <Providers initialState={initialState}>{children}</Providers>
             </body>
         </html>
