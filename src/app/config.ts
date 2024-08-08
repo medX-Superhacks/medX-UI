@@ -7,7 +7,7 @@ import { sepolia } from '@account-kit/infra';
 import { QueryClient } from '@tanstack/react-query';
 
 const uiConfig: AlchemyAccountsUIConfig = {
-    illustrationStyle: 'outline',
+    illustrationStyle: 'filled',
     auth: {
         sections: [[{ type: 'email' }], [{ type: 'passkey' }]],
         addPasskeyOnSignup: true,

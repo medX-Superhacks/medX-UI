@@ -25,8 +25,10 @@ export default function RootLayout({
     return (
         <html lang="en">
             <body className={`${inter.className}  text-black`}>
-                <Navbar />
-                <Providers initialState={initialState}>{children}</Providers>
+                <Providers initialState={initialState}>
+                    <Navbar />
+                    <div className="container mx-auto">{children}</div>
+                </Providers>
             </body>
         </html>
     );

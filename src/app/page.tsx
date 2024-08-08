@@ -1,20 +1,21 @@
 'use client';
 import { AuthCard, useAccount } from '@account-kit/react';
+import Image from 'next/image';
 import { useRouter, useSearchParams } from 'next/navigation';
 import React from 'react';
+import 'swiper/css';
 import 'swiper/css/pagination';
-import { Autoplay, Pagination } from 'swiper/modules';
+import { Autoplay } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import SwiperImage1 from '../../public/assets/swiper-1.png';
 import SwiperImage2 from '../../public/assets/swiper-2.png';
 import SwiperImage3 from '../../public/assets/swiper-3.png';
-import 'swiper/css';
-import Image from 'next/image';
+import SlightFlip from './components/ui/SlightFlip';
 export default function Home() {
     const searchParams = useSearchParams();
     const searchId = searchParams.get('orgId');
     const router = useRouter();
-    const { address } = useAccount({
+    const { address, isLoadingAccount } = useAccount({
         type: 'LightAccount',
     });
     React.useLayoutEffect(() => {
@@ -40,7 +41,7 @@ export default function Home() {
         },
     ];
     return (
-        <main className="container mx-auto grid grid-cols-2 h-full py-10">
+        <main className="grid grid-cols-2 h-full py-10">
             <Swiper
                 modules={[Autoplay]}
                 className="h-full w-full "
@@ -69,7 +70,14 @@ export default function Home() {
                 ))}
             </Swiper>
             <div className="shadow-xl rounded-xl p-5 text-black w-5/6 ml-auto">
-                <AuthCard />
+                {isLoadingAccount ? (
+                    <SlightFlip
+                        className="text-4xl  font-bold tracking-[-0.1em] text-black  md:leading-[5rem]"
+                        word="Welcome to Medx"
+                    />
+                ) : (
+                    <AuthCard />
+                )}
             </div>
         </main>
     );

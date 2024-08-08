@@ -19,6 +19,9 @@
 .btn-primary {
     background: linear-gradient(91.11deg, #84dfdd -0.97%, #157d7a 167.27%);
 }
+.text-fg-secondary {
+    color: black !important;
+}
 @media (prefers-color-scheme: dark) {
     :root {
         --foreground-rgb: 255, 255, 255;
