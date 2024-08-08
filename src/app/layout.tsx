@@ -6,6 +6,7 @@ import { config } from './config';
 import { headers } from 'next/headers';
 import { cookieToInitialState } from '@account-kit/core';
 import Navbar from './components/Navbar';
+import { Toaster } from 'react-hot-toast';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
@@ -26,6 +27,7 @@ export default function RootLayout({
         <html lang="en">
             <body className={`${inter.className}  text-black`}>
                 <Providers initialState={initialState}>
+                    <Toaster position="top-center" reverseOrder={false} />
                     <Navbar />
                     <div className="container mx-auto">{children}</div>
                 </Providers>
