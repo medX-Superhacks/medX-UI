@@ -1,7 +1,11 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
-
+import { Providers } from './providers';
+import { config } from './config';
+import { headers } from 'next/headers';
+import { cookieToInitialState } from '@account-kit/core';
+import Navbar from './components/Navbar';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
@@ -14,9 +18,18 @@ export default function RootLayout({
 }: Readonly<{
     children: React.ReactNode;
 }>) {
+    const initialState = cookieToInitialState(
+        config,
+        headers().get('cookie') ?? undefined
+    );
     return (
         <html lang="en">
-            <body className={inter.className}>{children}</body>
+            <body className={`${inter.className}  text-black`}>
+                <Providers initialState={initialState}>
+                    <Navbar />
+                    <div className="container mx-auto">{children}</div>
+                </Providers>
+            </body>
         </html>
     );
 }
