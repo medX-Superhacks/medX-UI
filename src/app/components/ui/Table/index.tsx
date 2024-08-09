@@ -1,5 +1,3 @@
-'use client';
-import { createMedicalRecordAttestation } from '@/app/lib/func';
 import {
     Table,
     TableBody,
@@ -10,102 +8,72 @@ import {
     TableHeader,
     TableRow,
 } from './TableComponents';
-import {
-    useSendUserOperation,
-    useSigner,
-    useSmartAccountClient,
-} from '@account-kit/react';
+
+import ProviderModal from '../provider/Modal';
 
 const invoices = [
     {
-        invoice: 'INV001',
-        paymentStatus: 'Paid',
+        invoice: '1',
+        name: 'Alice Johnson',
+        paymentStatus: 'Completed',
+        date: '2024-08-7',
         totalAmount: '$250.00',
-        paymentMethod: 'Credit Card',
     },
     {
-        invoice: 'INV002',
+        invoice: '2',
+        name: 'Bob Frank',
         paymentStatus: 'Pending',
+        date: '2024-08-11',
         totalAmount: '$150.00',
-        paymentMethod: 'PayPal',
     },
     {
-        invoice: 'INV003',
-        paymentStatus: 'Unpaid',
-        totalAmount: '$350.00',
-        paymentMethod: 'Bank Transfer',
-    },
-    {
-        invoice: 'INV004',
-        paymentStatus: 'Paid',
-        totalAmount: '$450.00',
-        paymentMethod: 'Credit Card',
-    },
-    {
-        invoice: 'INV005',
-        paymentStatus: 'Paid',
-        totalAmount: '$550.00',
-        paymentMethod: 'PayPal',
-    },
-    {
-        invoice: 'INV006',
+        invoice: '3',
+        name: 'Bunny',
         paymentStatus: 'Pending',
-        totalAmount: '$200.00',
-        paymentMethod: 'Bank Transfer',
+        date: '2024-08-15',
+        totalAmount: '$350.00',
     },
     {
-        invoice: 'INV007',
-        paymentStatus: 'Unpaid',
+        invoice: '4',
+        name: 'Martin',
+        paymentStatus: 'Pending',
+        date: '2024-08-21',
+        totalAmount: '$450.00',
+    },
+    {
+        invoice: '5',
+        name: 'Steve',
+        paymentStatus: 'Pending',
+        date: '2024-08-22',
+        totalAmount: '$550.00',
+    },
+    {
+        invoice: '6',
+        name: 'Roman',
+        paymentStatus: 'Pending',
+        date: '2024-08-25',
+        totalAmount: '$200.00',
+    },
+    {
+        invoice: '7',
+        name: 'Dwane',
+        paymentStatus: 'Pending',
+        date: '2024-08-28',
         totalAmount: '$300.00',
-        paymentMethod: 'Credit Card',
     },
 ];
 
 export function TableComponent() {
-    const signer = useSigner();
-    const { client } = useSmartAccountClient({
-        type: 'LightAccount',
-    });
-    const { sendUserOperation } = useSendUserOperation({
-        client,
-        // optional parameter that will wait for the transaction to be mined before returning
-        waitForTxn: true,
-        onSuccess: ({ hash, request }) => {
-            console.log(hash);
-        },
-        onError: (error) => {
-            console.log(error);
-        },
-    });
-    const handleCreateRecord = async () => {
-        const resp = await createMedicalRecordAttestation(
-            'Alice Johnson',
-            28,
-            true,
-            'Hypertension',
-            '0x0F284B92d59C8b59E11409495bE0c5e7dBe0dAf9',
-            signer
-        );
-        if (resp.data) {
-            const sender: any = {
-                target: resp.data.to,
-                data: resp.data.data,
-            };
-
-            sendUserOperation({
-                uo: sender,
-            });
-        }
-    };
     return (
         <Table>
-            <TableCaption>A list of your recent invoices.</TableCaption>
+            <TableCaption>A list of your recent records.</TableCaption>
             <TableHeader>
                 <TableRow>
-                    <TableHead className="w-[100px]">Invoice</TableHead>
-                    <TableHead>Status</TableHead>
+                    <TableHead className="w-[100px]">S.no</TableHead>
+                    <TableHead>Name</TableHead>
+                    <TableHead>Date</TableHead>
                     <TableHead>Medical Record Attestation</TableHead>
-                    <TableHead className="text-right">Amount</TableHead>
+                    <TableHead className="text-right">Status</TableHead>
                 </TableRow>
             </TableHeader>
             <TableBody>
@@ -114,22 +82,18 @@ export function TableComponent() {
                         <TableCell className="font-medium">
                             {invoice.invoice}
                         </TableCell>
-                        <TableCell>{invoice.paymentStatus}</TableCell>
-                        <TableCell onClick={() => handleCreateRecord()}>
-                            {invoice.paymentMethod}
+                        <TableCell>{invoice.name}</TableCell>
+                        <TableCell>{invoice.date}</TableCell>
+
+                        <TableCell className="w-fit flex items-center gap-x-4">
+                            <ProviderModal />
                         </TableCell>
                         <TableCell className="text-right">
-                            {invoice.totalAmount}
+                            {invoice.paymentStatus}
                         </TableCell>
                     </TableRow>
                 ))}
             </TableBody>
-            <TableFooter>
-                <TableRow>
-                    <TableCell colSpan={3}>Total</TableCell>
-                    <TableCell className="text-right">$2,500.00</TableCell>
-                </TableRow>
-            </TableFooter>
         </Table>
     );
 }

@@ -1,12 +1,11 @@
-import { Button } from '@headlessui/react';
-import React from 'react';
-import { encodeUSDCOperation } from '../lib/func';
 import {
     useSendUserOperation,
     useSmartAccountClient,
 } from '@account-kit/react';
+import { Button } from '@headlessui/react';
+import React from 'react';
 import toast from 'react-hot-toast';
-import { useAppSelector } from '@/redux/hooks';
+import { encodeUSDCOperation } from '../lib/func';
 
 const chains = [
     {
