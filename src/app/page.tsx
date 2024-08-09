@@ -1,5 +1,9 @@
 'use client';
-import { AuthCard, useAccount } from '@account-kit/react';
+import {
+    AuthCard,
+    useAccount,
+    useSmartAccountClient,
+} from '@account-kit/react';
 import Image from 'next/image';
 import { useRouter, useSearchParams } from 'next/navigation';
 import React from 'react';
@@ -15,7 +19,11 @@ export default function Home() {
     const searchParams = useSearchParams();
     const searchId = searchParams?.get('orgId');
     const router = useRouter();
-    const { address, isLoadingAccount } = useAccount({
+
+    const { address } = useSmartAccountClient({
+        type: 'LightAccount',
+    });
+    const { isLoadingAccount } = useAccount({
         type: 'LightAccount',
     });
     React.useLayoutEffect(() => {
@@ -40,6 +48,7 @@ export default function Home() {
             image: SwiperImage3,
         },
     ];
+
     return (
         <main className="grid grid-cols-2 h-full py-10">
             <Swiper
