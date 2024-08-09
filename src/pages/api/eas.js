@@ -72,6 +72,9 @@ const easInterface = new ethers.utils.Interface([
   }
 ]);
 
+// Schema UID for prescription
+const schemaUIDPrescription = '0x20351f973fdec1478924c89dfa533d8f872defa108d9c3c6512267d7e7e5dbc2';
+
 /**
  * Create and encode an attestation for a medical record.
  * @param {string} name - The name of the patient.
@@ -80,7 +83,6 @@ const easInterface = new ethers.utils.Interface([
  * @param {string} diagnosis - The diagnosis of the patient.
  * @param {bytes32} refUID - The reference UID for the attestation.
  * @param {string} recipient - The recipient address.
- * @param {BigInt} value - The value associated with the attestation.
  * @returns {object} An object containing the target contract address, encoded data, and value.
  */
 export const createMedicalRecordAttestation = (name, age, isInsured, diagnosis, refUID, recipient) => {
@@ -108,7 +110,7 @@ export const createMedicalRecordAttestation = (name, age, isInsured, diagnosis, 
       revocable: true,
       refUID: refUID || ethers.constants.HashZero, // Use provided refUID or default to HashZero
       data: encodedDataMedicalRecord,
-      value: value || 0n // Use provided value or default to 0n
+      value: 0n // No value needed for this transaction
     }
   };
 
@@ -130,5 +132,65 @@ export const createMedicalRecordAttestation = (name, age, isInsured, diagnosis, 
 export const generateProofMedicalRecord = (proofIndexes) => {
   const multiProof = privateData.generateMultiProof(proofIndexes);
   console.log('Multi-proof for selective reveal (Medical Record):', multiProof);
+  return multiProof;
+};
+
+/**
+ * Create and encode an attestation for a prescription.
+ * @param {string} prescriptionId - The ID of the prescription.
+ * @param {string} medication - The name of the medication.
+ * @param {string} dosage - The dosage instructions.
+ * @param {string} duration - The duration of the prescription.
+ * @param {bytes32} refUID - The reference UID for the attestation.
+ * @param {string} recipient - The recipient address.
+ * @returns {object} An object containing the target contract address, encoded data, and value.
+ */
+export const createPrescriptionAttestation = (prescriptionId, medication, dosage, duration, refUID, recipient) => {
+  // Create private data for the prescription
+  const privateData = new PrivateData([
+    { type: 'string', name: 'prescriptionId', value: prescriptionId },
+    { type: 'string', name: 'medication', value: medication },
+    { type: 'string', name: 'dosage', value: dosage },
+    { type: 'string', name: 'duration', value: duration }
+  ]);
+
+  // Get the full tree for the prescription
+  const fullTreePrescription = privateData.getFullTree();
+
+  // Encode the prescription data using the SchemaEncoder
+  const schemaEncoder = new SchemaEncoder(schemaUIDPrescription);
+  const encodedDataPrescription = schemaEncoder.encodeData(fullTreePrescription);
+
+  // Prepare the attestation data
+  const attestationData = {
+    schema: schemaUIDPrescription,
+    data: {
+      recipient,
+      expirationTime: 0,
+      revocable: true,
+      refUID: refUID || ethers.constants.HashZero, // Use provided refUID or default to HashZero
+      data: encodedDataPrescription,
+      value: 0n // No value needed for this transaction
+    }
+  };
+
+  // Encode the function call data using the interface
+  const data = easInterface.encodeFunctionData("attest", [attestationData]);
+
+  return {
+    target: easContractAddress, // Return the EAS contract address
+    data, // Encoded data for the transaction
+    value: 0n, // Attestation does not require ETH to be sent
+  };
+};
+
+/**
+ * Generate a multi-proof for a prescription.
+ * @param {Array<number>} proofIndexes - Array of indexes for the fields to selectively reveal.
+ * @returns {object} The multi-proof generated for the selective reveal of the prescription.
+ */
+export const generateProofPrescription = (proofIndexes) => {
+  const multiProof = privateData.generateMultiProof(proofIndexes);
+  console.log('Multi-proof for selective reveal (Prescription):', multiProof);
   return multiProof;
 };
