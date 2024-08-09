@@ -79,6 +79,7 @@ const easInterface = new ethers.utils.Interface([
  * @param {boolean} isInsured - Insurance status of the patient.
  * @param {string} diagnosis - The diagnosis of the patient.
  * @param {bytes32} refUID - The reference UID for the attestation.
+ * @param {string} recipient - The recipient address.
  * @param {BigInt} value - The value associated with the attestation.
  * @returns {object} An object containing the target contract address, encoded data, and value.
  */
@@ -119,4 +120,15 @@ export const createMedicalRecordAttestation = (name, age, isInsured, diagnosis, 
     data, // Encoded data for the transaction
     value: 0n, // Attestation does not require ETH to be sent
   };
+};
+
+/**
+ * Generate a multi-proof for a medical record.
+ * @param {Array<number>} proofIndexes - Array of indexes for the fields to selectively reveal.
+ * @returns {object} The multi-proof generated for the selective reveal of the medical record.
+ */
+export const generateProofMedicalRecord = (proofIndexes) => {
+  const multiProof = privateData.generateMultiProof(proofIndexes);
+  console.log('Multi-proof for selective reveal (Medical Record):', multiProof);
+  return multiProof;
 };
