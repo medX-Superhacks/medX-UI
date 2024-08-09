@@ -3,7 +3,6 @@ import Dropdown from '@/app/components/ui/Dropdown';
 import Modal from '@/app/components/ui/Modal';
 import { RadioGroupDemo } from '@/app/components/ui/RadioButton/radioButton';
 import { DOCTOR_PROFILE } from '@/config';
-import React from 'react';
 
 const DoctorProfile = () => {
     const reason = [
@@ -12,6 +11,7 @@ const DoctorProfile = () => {
         { id: 3, name: 'Injury' },
         { id: 4, name: 'Orthopedic' },
     ];
+
     return (
         <div className="grid grid-cols-3 pt-5 h-full w-full gap-x-10">
             {DOCTOR_PROFILE.map(

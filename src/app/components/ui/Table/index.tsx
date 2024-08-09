@@ -10,58 +10,7 @@ import {
 } from './TableComponents';
 
 import ProviderModal from '../provider/Modal';
-
-const invoices = [
-    {
-        invoice: '1',
-        name: 'Alice Johnson',
-        paymentStatus: 'Completed',
-        date: '2024-08-7',
-        totalAmount: '$250.00',
-    },
-    {
-        invoice: '2',
-        name: 'Bob Frank',
-        paymentStatus: 'Pending',
-        date: '2024-08-11',
-        totalAmount: '$150.00',
-    },
-    {
-        invoice: '3',
-        name: 'Bunny',
-        paymentStatus: 'Pending',
-        date: '2024-08-15',
-        totalAmount: '$350.00',
-    },
-    {
-        invoice: '4',
-        name: 'Martin',
-        paymentStatus: 'Pending',
-        date: '2024-08-21',
-        totalAmount: '$450.00',
-    },
-    {
-        invoice: '5',
-        name: 'Steve',
-        paymentStatus: 'Pending',
-        date: '2024-08-22',
-        totalAmount: '$550.00',
-    },
-    {
-        invoice: '6',
-        name: 'Roman',
-        paymentStatus: 'Pending',
-        date: '2024-08-25',
-        totalAmount: '$200.00',
-    },
-    {
-        invoice: '7',
-        name: 'Dwane',
-        paymentStatus: 'Pending',
-        date: '2024-08-28',
-        totalAmount: '$300.00',
-    },
-];
+import { invoices } from '@/config';
 
 export function TableComponent() {
     return (
@@ -86,7 +35,12 @@ export function TableComponent() {
                         <TableCell>{invoice.date}</TableCell>
 
                         <TableCell className="w-fit flex items-center gap-x-4">
-                            <ProviderModal />
+                            <ProviderModal
+                                name={invoice.name}
+                                age={invoice.age}
+                                gender={invoice.gender}
+                                address={invoice.address}
+                            />
                         </TableCell>
                         <TableCell className="text-right">
                             {invoice.paymentStatus}

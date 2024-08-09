@@ -20,7 +20,7 @@ export default function Home() {
     const searchId = searchParams?.get('orgId');
     const router = useRouter();
 
-    const { address, isLoadingClient } = useSmartAccountClient({
+    const { address } = useSmartAccountClient({
         type: 'LightAccount',
     });
     const { isLoadingAccount } = useAccount({

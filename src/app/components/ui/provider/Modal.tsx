@@ -8,8 +8,9 @@ import {
     TransitionChild,
 } from '@headlessui/react';
 import { createMedicalRecordAttestation } from '@/app/lib/func';
-import { IoIosCheckmarkCircleOutline } from 'react-icons/io';
+import { RiExternalLinkLine } from 'react-icons/ri';
 import { CiBellOn } from 'react-icons/ci';
+import { fetchAndLogAttestations } from '@/app/lib/query';
 import {
     useSendUserOperation,
     useSigner,
@@ -28,12 +29,23 @@ const bloodType = [
     { id: 5, name: 'AB+' },
     { id: 6, name: 'AB-' },
 ];
-export default function ProviderModal() {
+export default function ProviderModal({
+    name,
+    age,
+    gender,
+    address,
+}: {
+    name: string;
+    age: number;
+    gender: string;
+    address: string;
+}) {
     let [isOpen, setIsOpen] = useState(false);
     const [insured, setInsured] = useState(true);
     const [diagnose, setDiagnose] = useState('');
     const [loading, setLoading] = useState(false);
     const [currentState, setCurrentState] = useState(0);
+    const [easID, setEasId] = useState('');
     function open() {
         setIsOpen(true);
     }
@@ -49,9 +61,18 @@ export default function ProviderModal() {
         client,
         // optional parameter that will wait for the transaction to be mined before returning
         waitForTxn: true,
-        onSuccess: ({ hash, request }) => {
+        onSuccess: async ({ hash }: { hash: any }) => {
+            console.log(hash);
             setLoading(false);
-            setCurrentState(1);
+            const res: any = await fetchAndLogAttestations({
+                txid: {
+                    equals: hash,
+                },
+            });
+            if (res.length > 0) {
+                setEasId(res[0].id);
+                setCurrentState(1);
+            }
         },
         onError: (error) => {
             console.log(error);
@@ -62,11 +83,11 @@ export default function ProviderModal() {
     const handleCreateRecord = async () => {
         setLoading(true);
         const resp = await createMedicalRecordAttestation(
-            'Alice Johnson',
-            28,
+            name,
+            age,
             insured,
             diagnose,
-            '0x0F284B92d59C8b59E11409495bE0c5e7dBe0dAf9',
+            address,
             signer
         );
         if (resp.data) {
@@ -80,7 +101,6 @@ export default function ProviderModal() {
             });
         }
     };
-
     return (
         <>
             <Button
@@ -139,7 +159,7 @@ export default function ProviderModal() {
                                                     type="text"
                                                     id="name"
                                                     className="mt-2"
-                                                    value={'Alice Johnson'}
+                                                    value={name}
                                                     disabled
                                                 />
                                             </div>
@@ -153,7 +173,7 @@ export default function ProviderModal() {
                                                 <Input
                                                     type="number"
                                                     id="age"
-                                                    value={22}
+                                                    value={age}
                                                     className="mt-2"
                                                     disabled
                                                 />
@@ -168,7 +188,7 @@ export default function ProviderModal() {
                                                 <Input
                                                     type="text"
                                                     id="gender"
-                                                    value={'Male'}
+                                                    value={gender}
                                                     className="mt-2"
                                                     disabled
                                                 />
@@ -296,9 +316,15 @@ export default function ProviderModal() {
                                             >
                                                 Medical Record created
                                                 successfully
-                                                <IoIosCheckmarkCircleOutline
-                                                    size={20}
-                                                />
+                                                <a
+                                                    target="_blank"
+                                                    rel="noreferrer"
+                                                    href={`https://base-sepolia.easscan.org/attestation/view/${easID}`}
+                                                >
+                                                    <RiExternalLinkLine
+                                                        size={20}
+                                                    />
+                                                </a>
                                             </DialogTitle>
                                             <div className="flex items-center w-fit mt-5 bg-themelinear px-6 py-2 text-sm  rounded-lg font-semibold cursor-pointer text-white ">
                                                 Notify Doctor and Patient{'   '}

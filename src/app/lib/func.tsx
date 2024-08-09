@@ -73,12 +73,15 @@ export const createMedicalRecordAttestation = async (
     };
 
     const transaction = await eas.attest(attestationData);
-    const multiProof = privateData.generateMultiProof([0,1,2,3]);
-    console.log('Multi-proof for selective reveal (Medical Record):', multiProof);
-    
+    const multiProof = privateData.generateMultiProof([0, 1, 2, 3]);
+    console.log(
+        'Multi-proof for selective reveal (Medical Record):',
+        multiProof
+    );
+
     return {
         data: transaction.data,
-        zkProofMedicalRecord: multiProof
+        zkProofMedicalRecord: multiProof,
     };
 };
 
@@ -90,47 +93,49 @@ export const createPrescriptionAttestation = async (
     recipient: string,
     signer: any,
     refUID: string = ethers.constants.HashZero // Default to HashZero if not provided
-  ) => {
+) => {
     const eas = new EAS(easContractAddress);
     eas.connect(signer);
-  
+
     // Create private data for the prescription
     const privateData = new PrivateData([
-      { type: 'string', name: 'prescriptionId', value: prescriptionId },
-      { type: 'string', name: 'medication', value: medication },
-      { type: 'string', name: 'dosage', value: dosage },
-      { type: 'string', name: 'duration', value: duration }
+        { type: 'string', name: 'prescriptionId', value: prescriptionId },
+        { type: 'string', name: 'medication', value: medication },
+        { type: 'string', name: 'dosage', value: dosage },
+        { type: 'string', name: 'duration', value: duration },
     ]);
-  
+
     // Get the full tree for the prescription
     const fullTreePrescription = privateData.getFullTree();
-  
+
     // Encode the prescription data using the SchemaEncoder
     const schemaEncoderPrescription = new SchemaEncoder('bytes32 privateData');
     const encodedDataPrescription = schemaEncoderPrescription.encodeData([
-      { name: 'privateData', value: fullTreePrescription.root, type: 'bytes32' }
+        {
+            name: 'privateData',
+            value: fullTreePrescription.root,
+            type: 'bytes32',
+        },
     ]);
-  
+
     // Prepare the attestation data
     const attestationData: any = {
-      schema: schemaUID,
-      data: {
-        recipient,
-        expirationTime: 0,
-        revocable: true,
-        refUID,
-        data: encodedDataPrescription,
-      }
+        schema: schemaUID,
+        data: {
+            recipient,
+            expirationTime: 0,
+            revocable: true,
+            refUID,
+            data: encodedDataPrescription,
+        },
     };
-  
+
     const transaction = await eas.attest(attestationData);
     const multiProof = privateData.generateMultiProof([0, 1, 2, 3]);
     console.log('Multi-proof for selective reveal (Prescription):', multiProof);
-  
-    return {
-      data: transaction.data,
-      zkProofPrescription: multiProof
-    };
-  };
-  
 
+    return {
+        data: transaction.data,
+        zkProofPrescription: multiProof,
+    };
+};
