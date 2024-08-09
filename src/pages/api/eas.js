@@ -73,7 +73,7 @@ const easInterface = new ethers.utils.Interface([
 ]);
 
 // Schema UID for prescription
-const schemaUIDPrescription = '0x20351f973fdec1478924c89dfa533d8f872defa108d9c3c6512267d7e7e5dbc2';
+const schemaUID = '0x20351f973fdec1478924c89dfa533d8f872defa108d9c3c6512267d7e7e5dbc2';
 
 /**
  * Create and encode an attestation for a medical record.
@@ -98,19 +98,18 @@ export const createMedicalRecordAttestation = (name, age, isInsured, diagnosis, 
   const fullTreeMedicalRecord = privateData.getFullTree();
 
   // Encode the medical record data using the SchemaEncoder
-  const schemaEncoder = new SchemaEncoder(schemaUIDMedicalRecord);
-  const encodedDataMedicalRecord = schemaEncoder.encodeData(fullTreeMedicalRecord);
+  const schemaEncoderMedicalRecord = new SchemaEncoder('bytes32 privateData');
+  const encodedDataMedicalRecord = schemaEncoderMedicalRecord.encodeData([{ name: 'privateData', value: fullTreeMedicalRecord.root, type: 'bytes32' }]);
 
   // Prepare the attestation data
   const attestationData = {
-    schema: schemaUIDMedicalRecord,
+    schema: schemaUID,
     data: {
       recipient,
       expirationTime: 0,
       revocable: true,
       refUID: refUID || ethers.constants.HashZero, // Use provided refUID or default to HashZero
       data: encodedDataMedicalRecord,
-      value: 0n // No value needed for this transaction
     }
   };
 
@@ -158,12 +157,14 @@ export const createPrescriptionAttestation = (prescriptionId, medication, dosage
   const fullTreePrescription = privateData.getFullTree();
 
   // Encode the prescription data using the SchemaEncoder
-  const schemaEncoder = new SchemaEncoder(schemaUIDPrescription);
-  const encodedDataPrescription = schemaEncoder.encodeData(fullTreePrescription);
+// Create an attestation with the Merkle root and reference the medical record attestation
+const schemaEncoderPrescription = new SchemaEncoder('bytes32 privateData');
+const encodedDataPrescription = schemaEncoderPrescription.encodeData([{ name: 'privateData', value: fullTreePrescription.root, type: 'bytes32' }]);
+
 
   // Prepare the attestation data
   const attestationData = {
-    schema: schemaUIDPrescription,
+    schema: schemaUID,
     data: {
       recipient,
       expirationTime: 0,
