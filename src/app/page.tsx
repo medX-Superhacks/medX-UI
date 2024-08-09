@@ -1,5 +1,9 @@
 'use client';
-import { AuthCard, useAccount } from '@account-kit/react';
+import {
+    AuthCard,
+    useAccount,
+    useSmartAccountClient,
+} from '@account-kit/react';
 import Image from 'next/image';
 import { useRouter, useSearchParams } from 'next/navigation';
 import React from 'react';
@@ -15,7 +19,8 @@ export default function Home() {
     const searchParams = useSearchParams();
     const searchId = searchParams?.get('orgId');
     const router = useRouter();
-    const { address, isLoadingAccount } = useAccount({
+
+    const { address, isLoadingClient } = useSmartAccountClient({
         type: 'LightAccount',
     });
     React.useLayoutEffect(() => {
@@ -40,6 +45,7 @@ export default function Home() {
             image: SwiperImage3,
         },
     ];
+
     return (
         <main className="grid grid-cols-2 h-full py-10">
             <Swiper
@@ -70,7 +76,7 @@ export default function Home() {
                 ))}
             </Swiper>
             <div className="shadow-xl rounded-xl p-5 text-black w-5/6 ml-auto">
-                {isLoadingAccount ? (
+                {isLoadingClient ? (
                     <SlightFlip
                         className="text-4xl  font-bold tracking-[-0.1em] text-black  md:leading-[5rem]"
                         word="Welcome to Medx"

@@ -8,3 +8,17 @@ export const shortenAddress = (address: string): string => {
 export default function clsxm(...classes: ClassValue[]) {
     return twMerge(clsx(...classes));
 }
+export const validationCheck = ({
+    name,
+    age,
+    gender,
+}: {
+    name: string;
+    age: number;
+    gender: string;
+}) => {
+    if (!name || !age || !gender) {
+        return false;
+    }
+    return true;
+};
