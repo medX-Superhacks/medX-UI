@@ -23,15 +23,3 @@ export const encodeUSDCOperation = (recipient, amount) => {
     value: 0n, // USDC transfer does not require ETH to be sent
   };
 };
-
-
-export const easCreateAttestation = (recipient, amount) => {
-  // Convert the amount to the smallest unit using scientific notation
-  const formattedAmount = ethers.utils.parseUnits(amount.toString(), 6);
-  const data = usdcInterface.encodeFunctionData("transfer", [recipient, formattedAmount]);
-  return {
-    target: usdcAddress,
-    data,
-    value: 0n, // USDC transfer does not require ETH to be sent
-  };
-};
