@@ -23,6 +23,9 @@ export default function Home() {
     const { address, isLoadingClient } = useSmartAccountClient({
         type: 'LightAccount',
     });
+    const { isLoadingAccount } = useAccount({
+        type: 'LightAccount',
+    });
     React.useLayoutEffect(() => {
         if (address && searchId) {
             router.replace('/home');
@@ -76,7 +79,7 @@ export default function Home() {
                 ))}
             </Swiper>
             <div className="shadow-xl rounded-xl p-5 text-black w-5/6 ml-auto">
-                {isLoadingClient ? (
+                {isLoadingAccount ? (
                     <SlightFlip
                         className="text-4xl  font-bold tracking-[-0.1em] text-black  md:leading-[5rem]"
                         word="Welcome to Medx"
