@@ -17,7 +17,7 @@ export const invoices = [
         name: 'Alice Johnson',
         age: 25,
         gender: 'Male',
-        paymentStatus: 'Completed',
+        paymentStatus: 'Pending',
         date: '2024-08-7',
         address: '0x0F284B92d59C8b59E11409495bE0c5e7dBe0dAf9',
     },
@@ -65,9 +65,10 @@ export const invoices = [
         name: 'Bunny',
         age: 20,
         gender: 'Male',
-        paymentStatus: 'Pending',
+        paymentStatus: 'Completed',
         date: '2024-08-15',
         address: '0x260f9FdfD971395634E92b3D574182befb63B33d',
+        attested: true,
         zkProof: {
             leaves: [
                 {
@@ -104,9 +105,10 @@ export const invoices = [
         name: 'Martin',
         age: 34,
         gender: 'Male',
-        paymentStatus: 'Pending',
+        paymentStatus: 'Completed',
         date: '2024-08-21',
         address: '0x8a052Be15eC984320Ae940CBDCCCf8f97BeF1a09',
+        attested: true,
         zkProof: {
             leaves: [
                 {
@@ -143,8 +145,9 @@ export const invoices = [
         name: 'Steve',
         age: 55,
         gender: 'Male',
-        paymentStatus: 'Pending',
+        paymentStatus: 'Completed',
         date: '2024-08-22',
+        attested: true,
         address: '0xBb0Ad5E4AA60EE7393e7E51B5071B9b7DC5bbd44',
     },
     {
@@ -152,8 +155,9 @@ export const invoices = [
         name: 'Roman',
         age: 66,
         gender: 'Male',
-        paymentStatus: 'Pending',
+        paymentStatus: 'Completed',
         date: '2024-08-25',
+        attested: true,
         address: '0xEF8817ef9D776605dD2fF7ae87c7103915F0630f',
     },
     {
@@ -161,8 +165,9 @@ export const invoices = [
         name: 'Dwane',
         age: 76,
         gender: 'Male',
-        paymentStatus: 'Pending',
+        paymentStatus: 'Completed',
         date: '2024-08-28',
+        attested: true,
         address: '0x8a052Be15eC984320Ae940CBDCCCf8f97BeF1a09',
     },
 ];

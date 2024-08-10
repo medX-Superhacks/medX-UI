@@ -12,10 +12,12 @@ import {
 import { fetchTotalData } from '@/app/lib/query';
 import { invoices } from '@/config';
 import { useAppSelector } from '@/redux/hooks';
+import { RxAvatar } from 'react-icons/rx';
 import { useSmartAccountClient } from '@account-kit/react';
 import React from 'react';
 import toast from 'react-hot-toast';
 import ProviderModal from '../provider/Modal';
+import { CiCircleCheck } from 'react-icons/ci';
 
 export function TableComponent() {
     const { address } = useSmartAccountClient({
@@ -45,12 +47,11 @@ export function TableComponent() {
             .writeText(JSON.stringify(data))
             .then(() => {
                 toast.success('Zk proof copied to clipboard');
-
                 toast.loading(
                     'You will be redirected to the external link shortly.'
                 );
-                toast.dismiss();
                 setTimeout(() => {
+                    toast.dismiss();
                     window.open(
                         `https://base-sepolia.easscan.org/attestation/view/${easID}`,
                         '_blank'
@@ -85,37 +86,40 @@ export function TableComponent() {
                             <TableCell className="font-medium">
                                 {invoice.invoice}
                             </TableCell>
-                            <TableCell>{invoice.name}</TableCell>
+                            <TableCell className="flex items-center gap-x-2">
+                                <RxAvatar size={30} /> {invoice.name}
+                            </TableCell>
                             <TableCell>{invoice.date}</TableCell>
 
                             <TableCell className="w-fit flex items-center gap-x-4">
-                                {!matchExists ? (
-                                    <div className="flex items-center gap-x-4">
-                                        <div className="border-2 rounded-xl px-4 py-2">
-                                            View
+                                {matchExists ? (
+                                    <div>
+                                        <div className="flex items-center gap-x-4">
+                                            <div className="border-2 rounded-xl px-4 py-2 cursor-pointer">
+                                                View
+                                            </div>
+                                            <div
+                                                className="border-2 rounded-xl px-4 py-2 cursor-pointer"
+                                                onClick={handleCopy}
+                                            >
+                                                Validate
+                                            </div>
                                         </div>
-                                        <div
-                                            className="border-2 rounded-xl px-4 py-2"
-                                            onClick={handleCopy}
-                                        >
-                                            Validate
+                                        <div className="font-medium justify-center gap-x-1 pt-2 text-sm flex items-center">
+                                            Onchain Attested
+                                            <CiCircleCheck
+                                                color="green"
+                                                size={25}
+                                            />
                                         </div>
                                     </div>
                                 ) : (
-                                    <>
-                                        <ProviderModal
-                                            name={invoice.name}
-                                            age={invoice.age}
-                                            gender={invoice.gender}
-                                            address={invoice.address}
-                                        />
-                                        <div
-                                            className="border-2 rounded-xl px-4 py-2"
-                                            onClick={handleCopy}
-                                        >
-                                            Validate
-                                        </div>
-                                    </>
+                                    <ProviderModal
+                                        name={invoice.name}
+                                        age={invoice.age}
+                                        gender={invoice.gender}
+                                        address={invoice.address}
+                                    />
                                 )}
                             </TableCell>
                             <TableCell className="text-right">
