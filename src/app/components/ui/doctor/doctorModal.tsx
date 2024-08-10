@@ -3,7 +3,7 @@ import { generateId } from '@/app/lib';
 import { createPrescriptionAttestation } from '@/app/lib/func';
 import { fetchAndLogAttestations } from '@/app/lib/query';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
-import { setDoctorEasID } from '@/redux/reducer/zkProof';
+import { setDoctorAnalysis, setDoctorEasID } from '@/redux/reducer/zkProof';
 import {
     useSendUserOperation,
     useSigner,
@@ -34,15 +34,13 @@ const DoctorModal = ({
     const [isOpen, setIsOpen] = useState(false);
     const [currentState, setCurrentState] = useState(0);
     const [loading, setLoading] = useState(false);
+    const doctorAnalysis = useAppSelector(
+        (state) => state.storeZkProof.doctorAnalysis
+    );
     const dispatch = useAppDispatch();
     const doctorEasID = useAppSelector(
         (state) => state.storeZkProof.doctorEasID
     );
-    const [doctorAnalysis, setDoctorAnalysis] = useState({
-        medication: '',
-        dosage: '',
-        duration: '',
-    });
     function open() {
         setIsOpen(true);
     }
@@ -160,16 +158,16 @@ const DoctorModal = ({
                                                     value={
                                                         doctorAnalysis.medication
                                                     }
-                                                    onChange={(e) =>
-                                                        setDoctorAnalysis(
-                                                            (prevState) => ({
-                                                                ...prevState,
+                                                    onChange={(e) => {
+                                                        dispatch(
+                                                            setDoctorAnalysis({
+                                                                ...doctorAnalysis,
                                                                 medication:
                                                                     e.target
                                                                         .value,
                                                             })
-                                                        )
-                                                    }
+                                                        );
+                                                    }}
                                                 />
                                             </div>
                                             <div className="text-black pt-2">
@@ -187,15 +185,15 @@ const DoctorModal = ({
                                                     value={
                                                         doctorAnalysis.dosage
                                                     }
-                                                    onChange={(e) =>
-                                                        setDoctorAnalysis(
-                                                            (prevState) => ({
-                                                                ...prevState,
+                                                    onChange={(e) => {
+                                                        dispatch(
+                                                            setDoctorAnalysis({
+                                                                ...doctorAnalysis,
                                                                 dosage: e.target
                                                                     .value,
                                                             })
-                                                        )
-                                                    }
+                                                        );
+                                                    }}
                                                 />
                                             </div>
                                             <div className="text-black pt-2">
@@ -213,16 +211,16 @@ const DoctorModal = ({
                                                     value={
                                                         doctorAnalysis.duration
                                                     }
-                                                    onChange={(e) =>
-                                                        setDoctorAnalysis(
-                                                            (prevState) => ({
-                                                                ...prevState,
+                                                    onChange={(e) => {
+                                                        dispatch(
+                                                            setDoctorAnalysis({
+                                                                ...doctorAnalysis,
                                                                 duration:
                                                                     e.target
                                                                         .value,
                                                             })
-                                                        )
-                                                    }
+                                                        );
+                                                    }}
                                                 />
                                             </div>
                                             <div className="mt-4">

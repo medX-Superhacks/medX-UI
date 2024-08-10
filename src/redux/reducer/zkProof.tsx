@@ -7,7 +7,11 @@ interface Leaf {
     value: string | bigint; // Using string or bigint to store BigInt values
     salt: string;
 }
-
+interface DoctorAnalysis {
+    medication: string;
+    dosage: string;
+    duration: string;
+}
 // Define the initial state type
 interface ZkProofState {
     leaves: Leaf[];
@@ -15,6 +19,7 @@ interface ZkProofState {
     proofFlags: boolean[];
     easID: string; // New state property for easID
     doctorEasID: string;
+    doctorAnalysis: DoctorAnalysis;
 }
 
 // Initial state
@@ -24,8 +29,12 @@ const initialState: ZkProofState = {
     proofFlags: [],
     easID: '',
     doctorEasID: '',
+    doctorAnalysis: {
+        medication: '',
+        dosage: '',
+        duration: '',
+    },
 };
-
 // Create the slice
 const storeZkProof = createSlice({
     name: 'storeZkProof',
@@ -48,9 +57,13 @@ const storeZkProof = createSlice({
         setDoctorEasID: (state, action: PayloadAction<string>) => {
             state.doctorEasID = action.payload;
         },
+        setDoctorAnalysis: (state, action: PayloadAction<DoctorAnalysis>) => {
+            state.doctorAnalysis = action.payload;
+        },
     },
 });
 
 // Export the action and reducer
-export const { storeProof, setEasID, setDoctorEasID } = storeZkProof.actions;
+export const { storeProof, setEasID, setDoctorEasID, setDoctorAnalysis } =
+    storeZkProof.actions;
 export default storeZkProof;

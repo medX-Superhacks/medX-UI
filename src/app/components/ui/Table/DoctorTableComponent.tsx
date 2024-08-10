@@ -1,5 +1,9 @@
 'use client';
 import { invoices } from '@/config';
+import { CiCircleCheck } from 'react-icons/ci';
+import { RxAvatar } from 'react-icons/rx';
+import DoctorModal from '../doctor/doctorModal';
+import ViewMedicalModal from '../MedicalModal/ViewModal';
 import {
     Table,
     TableBody,
@@ -9,10 +13,6 @@ import {
     TableHeader,
     TableRow,
 } from './TableComponents';
-import { RxAvatar } from 'react-icons/rx';
-import { CiCircleCheck } from 'react-icons/ci';
-import DoctorModal from '../doctor/doctorModal';
-import ViewMedicalModal from '../MedicalModal/ViewModal';
 const DoctorTableComponent = () => {
     return (
         <Table>
@@ -41,7 +41,12 @@ const DoctorTableComponent = () => {
                             <TableCell>
                                 <div>
                                     <div className="flex items-center gap-x-4">
-                                        <ViewMedicalModal />
+                                        <ViewMedicalModal
+                                            name={invoice.name}
+                                            age={invoice.age}
+                                            gender={invoice.gender}
+                                            type={'forDoctor'}
+                                        />
 
                                         <div className="border-2 rounded-xl px-4 py-2 cursor-pointer">
                                             Validate

@@ -101,7 +101,7 @@ export function TableComponent() {
                                 {matchExists ? (
                                     <div>
                                         <div className="flex items-center gap-x-4">
-                                            <ViewMedicalModal />
+                                            {/* <ViewMedicalModal /> */}
                                             <div
                                                 className="border-2 rounded-xl px-4 py-2 cursor-pointer"
                                                 onClick={() =>

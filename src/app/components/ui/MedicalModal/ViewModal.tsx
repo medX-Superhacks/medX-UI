@@ -8,7 +8,19 @@ import {
 } from '@headlessui/react';
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-const ViewMedicalModal = () => {
+import { Input } from '../Input';
+import { useAppSelector } from '@/redux/hooks';
+const ViewMedicalModal = ({
+    name,
+    age,
+    gender,
+    type,
+}: {
+    name: string;
+    age: number;
+    gender: string;
+    type?: string;
+}) => {
     const [isOpen, setIsOpen] = useState(false);
     function open() {
         setIsOpen(true);
@@ -17,6 +29,9 @@ const ViewMedicalModal = () => {
     function close() {
         setIsOpen(false);
     }
+    const doctorAnalysis = useAppSelector(
+        (state) => state.storeZkProof.doctorAnalysis
+    );
     return (
         <>
             <div
@@ -64,6 +79,100 @@ const ViewMedicalModal = () => {
                                         >
                                             Record Details
                                         </DialogTitle>
+                                        <div className="text-black pt-2">
+                                            <label
+                                                htmlFor="name"
+                                                className="text-sm"
+                                            >
+                                                Name
+                                            </label>
+                                            <Input
+                                                type="text"
+                                                id="Name"
+                                                value={name}
+                                                disabled
+                                            />
+                                        </div>
+                                        <div className="text-black pt-2">
+                                            <label
+                                                htmlFor="name"
+                                                className="text-sm"
+                                            >
+                                                Age
+                                            </label>
+                                            <Input
+                                                type="number"
+                                                id="age"
+                                                value={age}
+                                                disabled
+                                            />
+                                        </div>
+                                        <div className="text-black pt-2">
+                                            <label
+                                                htmlFor="name"
+                                                className="text-sm"
+                                            >
+                                                Gender
+                                            </label>
+                                            <Input
+                                                type="text"
+                                                id="Gender"
+                                                value={gender}
+                                                disabled
+                                            />
+                                        </div>
+                                        {type === 'forDoctor' && (
+                                            <>
+                                                <div className="text-black pt-2">
+                                                    <label
+                                                        htmlFor="name"
+                                                        className="text-sm"
+                                                    >
+                                                        Medication
+                                                    </label>
+                                                    <Input
+                                                        type="text"
+                                                        id="medication"
+                                                        value={
+                                                            doctorAnalysis.medication
+                                                        }
+                                                        disabled
+                                                    />
+                                                </div>
+                                                <div className="text-black pt-2">
+                                                    <label
+                                                        htmlFor="name"
+                                                        className="text-sm"
+                                                    >
+                                                        Dosage
+                                                    </label>
+                                                    <Input
+                                                        type="text"
+                                                        id="Dosage"
+                                                        value={
+                                                            doctorAnalysis.dosage
+                                                        }
+                                                        disabled
+                                                    />
+                                                </div>
+                                                <div className="text-black pt-2">
+                                                    <label
+                                                        htmlFor="name"
+                                                        className="text-sm"
+                                                    >
+                                                        Duration
+                                                    </label>
+                                                    <Input
+                                                        type="text"
+                                                        id="Duration"
+                                                        value={
+                                                            doctorAnalysis.duration
+                                                        }
+                                                        disabled
+                                                    />
+                                                </div>
+                                            </>
+                                        )}
                                     </motion.div>
                                 </DialogPanel>
                             </TransitionChild>
