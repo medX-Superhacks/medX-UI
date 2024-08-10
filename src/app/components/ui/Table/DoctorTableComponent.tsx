@@ -14,7 +14,9 @@ import {
     TableRow,
 } from './TableComponents';
 import toast from 'react-hot-toast';
+import { useState } from 'react';
 const DoctorTableComponent = () => {
+    const [isCreated, setIsCreated] = useState(false);
     const handleCopyStatic = (attestationId: string, zkProof: any) => {
         const targetEasID = attestationId;
         navigator.clipboard
@@ -105,17 +107,17 @@ const DoctorTableComponent = () => {
                                     medication={invoice.medication}
                                     dosage={invoice.dosage}
                                     duration={invoice.duration}
+                                    isCreated={isCreated}
+                                    setIsCreated={setIsCreated}
                                 />
                             </TableCell>
                             <TableCell className="text-right">
-                                {invoice.name === 'Alice Johnson'
+                                {isCreated && invoice.name === 'Bob Frank'
                                     ? 'Completed'
                                     : invoice.name === 'Bob Frank'
                                     ? 'Pending'
                                     : invoice.name === 'Bunny'
                                     ? 'Completed'
-                                    : invoice.name === 'Martin'
-                                    ? 'Pending'
                                     : invoice.paymentStatus}
                             </TableCell>
                         </TableRow>

@@ -40,6 +40,9 @@ export default function ProviderModal({
     address,
     attestationId,
     zkProof,
+    diagnoseVal,
+    isCreated,
+    setIsCreated,
 }: {
     name: string;
     age: number;
@@ -47,9 +50,12 @@ export default function ProviderModal({
     address: string;
     attestationId: string;
     zkProof: any;
+    diagnoseVal: string;
+    isCreated: boolean;
+    setIsCreated: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
     const [isOpen, setIsOpen] = useState(false);
-    const [isCreated, setIsCreated] = useState(false);
+
     const [insured, setInsured] = useState(true);
     const [diagnose, setDiagnose] = useState('');
     const [loading, setLoading] = useState(false);
@@ -193,7 +199,7 @@ export default function ProviderModal({
                             name={name}
                             age={age}
                             gender={gender}
-                            diagnoses={diagnose}
+                            diagnoses={diagnoseVal}
                             bloodType={'A+'}
                         />
                         <div

@@ -5,6 +5,7 @@ import { fetchAndLogAttestations } from '@/app/lib/query';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { setDoctorAnalysis, setDoctorEasID } from '@/redux/reducer/zkProof';
 import { CiCircleCheck } from 'react-icons/ci';
+import { CiBellOn } from 'react-icons/ci';
 import {
     useSendUserOperation,
     useSigner,
@@ -36,6 +37,8 @@ const DoctorModal = ({
     medication,
     dosage,
     duration,
+    isCreated,
+    setIsCreated,
 }: {
     name: string;
     age: number;
@@ -46,8 +49,9 @@ const DoctorModal = ({
     medication: string;
     dosage: string;
     duration: string;
+    isCreated: boolean;
+    setIsCreated: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
-    const [isCreated, setIsCreated] = useState(false);
     const signer = useSigner();
     const [isOpen, setIsOpen] = useState(false);
     const [currentState, setCurrentState] = useState(0);
@@ -371,6 +375,13 @@ const DoctorModal = ({
                                                     />
                                                 </a>
                                             </DialogTitle>
+                                            <div className="flex items-center w-fit mt-5 bg-themelinear px-6 py-2 text-sm  rounded-lg font-semibold cursor-pointer text-white ">
+                                                Notify Patient
+                                                <CiBellOn
+                                                    size={20}
+                                                    className="ml-2"
+                                                />
+                                            </div>
                                         </motion.div>
                                     )}
                                 </DialogPanel>

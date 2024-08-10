@@ -12,14 +12,12 @@ import {
 import { fetchTotalData } from '@/app/lib/query';
 import { invoices } from '@/config';
 import { useSmartAccountClient } from '@account-kit/react';
-import React from 'react';
-import toast from 'react-hot-toast';
-import { CiCircleCheck } from 'react-icons/ci';
+import React, { useState } from 'react';
 import { RxAvatar } from 'react-icons/rx';
-import ViewMedicalModal from '../MedicalModal/ViewMedicalModal';
 import ProviderModal from '../provider/Modal';
 
 export function TableComponent() {
+    const [isCreated, setIsCreated] = useState(false);
     const { address } = useSmartAccountClient({
         type: 'LightAccount',
     });
@@ -69,10 +67,15 @@ export function TableComponent() {
                                     address={invoice.address}
                                     attestationId={invoice.attestationId}
                                     zkProof={invoice.zkProof}
+                                    diagnoseVal={invoice.diagnoses}
+                                    isCreated={isCreated}
+                                    setIsCreated={setIsCreated}
                                 />
                             </TableCell>
                             <TableCell className="text-right">
-                                {invoice.paymentStatus}
+                                {invoice.name === 'Alice Johnson' && isCreated
+                                    ? 'Completed'
+                                    : invoice.paymentStatus}
                             </TableCell>
                         </TableRow>
                     );
