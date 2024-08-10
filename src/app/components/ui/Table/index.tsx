@@ -12,13 +12,12 @@ import {
 import { fetchTotalData } from '@/app/lib/query';
 import { invoices } from '@/config';
 import { useAppSelector } from '@/redux/hooks';
-import { RxAvatar } from 'react-icons/rx';
 import { useSmartAccountClient } from '@account-kit/react';
 import React from 'react';
 import toast from 'react-hot-toast';
-import ProviderModal from '../provider/Modal';
 import { CiCircleCheck } from 'react-icons/ci';
-import ViewMedicalModal from '../MedicalModal/ViewModal';
+import { RxAvatar } from 'react-icons/rx';
+import ProviderModal from '../provider/Modal';
 
 export function TableComponent() {
     const { address } = useSmartAccountClient({

@@ -4,6 +4,7 @@ import { createPrescriptionAttestation } from '@/app/lib/func';
 import { fetchAndLogAttestations } from '@/app/lib/query';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { setDoctorAnalysis, setDoctorEasID } from '@/redux/reducer/zkProof';
+import { CiCircleCheck } from 'react-icons/ci';
 import {
     useSendUserOperation,
     useSigner,
@@ -22,20 +23,32 @@ import { useState } from 'react';
 import toast from 'react-hot-toast';
 import { RiExternalLinkLine } from 'react-icons/ri';
 import { Input } from '../Input';
+import ViewPrescriptionModal from '../MedicalModal/ViewPrescription';
+import { storeDoctorProof } from '@/redux/reducer/doctorZk';
 
 const DoctorModal = ({
+    name,
+    age,
+    gender,
     attestationId,
     address,
 }: {
+    name: string;
+    age: number;
+    gender: string;
     attestationId?: string;
     address: string;
 }) => {
+    const [isCreated, setIsCreated] = useState(false);
     const signer = useSigner();
     const [isOpen, setIsOpen] = useState(false);
     const [currentState, setCurrentState] = useState(0);
     const [loading, setLoading] = useState(false);
     const doctorAnalysis = useAppSelector(
         (state) => state.storeZkProof.doctorAnalysis
+    );
+    const { leaves, proof, proofFlags } = useAppSelector(
+        (state) => state.doctorZkProof
     );
     const dispatch = useAppDispatch();
     const doctorEasID = useAppSelector(
@@ -48,6 +61,29 @@ const DoctorModal = ({
     function close() {
         setIsOpen(false);
     }
+    const handleCopy = () => {
+        const targetEasID = doctorEasID;
+        const data = { leaves, proof, proofFlags };
+        navigator.clipboard
+            .writeText(JSON.stringify(data))
+            .then(() => {
+                toast.success('Zk proof copied to clipboard');
+                toast.loading(
+                    'You will be redirected to the external link shortly.'
+                );
+                setTimeout(() => {
+                    toast.dismiss();
+                    window.open(
+                        `https://base-sepolia.easscan.org/attestation/view/${targetEasID}`,
+                        '_blank'
+                    );
+                }, 5000);
+            })
+            .catch((err) => {
+                toast.error('Failed to copy Zk proof to clipboard');
+                console.error('Error copying to clipboard:', err);
+            });
+    };
     const { client } = useSmartAccountClient({
         type: 'LightAccount',
     });
@@ -56,28 +92,36 @@ const DoctorModal = ({
         // optional parameter that will wait for the transaction to be mined before returning
         waitForTxn: true,
         onSuccess: async ({ hash }: { hash: any }) => {
+            console.log(hash);
             setLoading(false);
+
+            // Add a delay of 4 seconds
+            await new Promise((resolve) => setTimeout(resolve, 4000));
+
             const res: any = await fetchAndLogAttestations({
                 txid: {
                     equals: hash,
                 },
             });
-            console.log(res);
+
             if (res.length > 0) {
                 dispatch(setDoctorEasID(res[0].id));
                 setCurrentState(1);
+                setIsCreated(true);
             }
         },
+
         onError: (error) => {
             console.log(error);
             setLoading(false);
             toast.error('Something went wrong');
         },
     });
+
     const handleCreatePrescription = async () => {
         setLoading(true);
         const newId = generateId();
-        const resp = await createPrescriptionAttestation(
+        const resp: any = await createPrescriptionAttestation(
             newId.toString(),
             doctorAnalysis.medication,
             doctorAnalysis.dosage,
@@ -91,6 +135,7 @@ const DoctorModal = ({
                 target: resp.data.to,
                 data: resp.data.data,
             };
+            dispatch(storeDoctorProof(resp.zkProofPrescription));
             sendUserOperation({
                 uo: sender,
             });
@@ -98,12 +143,37 @@ const DoctorModal = ({
     };
     return (
         <>
-            <Button
-                onClick={open}
-                className="bg-themelinear px-6 py-2 text-sm  rounded-lg font-semibold cursor-pointer text-white "
-            >
-                Create
-            </Button>
+            {isCreated ? (
+                <div>
+                    <div className="flex items-center gap-x-4">
+                        <ViewPrescriptionModal
+                            name={name}
+                            age={age}
+                            gender={gender}
+                            type={'forDoctor'}
+                        />
+
+                        <div
+                            className="border-2 rounded-xl px-4 py-2 cursor-pointer"
+                            onClick={handleCopy}
+                        >
+                            Verify
+                        </div>
+                    </div>
+                    <div className="font-medium gap-x-1 pt-2 text-sm flex pl-4">
+                        Onchain Attested
+                        <CiCircleCheck color="green" size={25} />
+                    </div>
+                </div>
+            ) : (
+                <Button
+                    onClick={open}
+                    className="bg-themelinear px-6 py-2 text-sm  rounded-lg font-semibold cursor-pointer text-white "
+                >
+                    Create
+                </Button>
+            )}
+
             <Transition appear show={isOpen}>
                 <Dialog
                     open={isOpen}

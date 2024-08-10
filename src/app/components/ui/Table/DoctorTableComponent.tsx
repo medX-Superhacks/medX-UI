@@ -3,7 +3,6 @@ import { invoices } from '@/config';
 import { CiCircleCheck } from 'react-icons/ci';
 import { RxAvatar } from 'react-icons/rx';
 import DoctorModal from '../doctor/doctorModal';
-import ViewMedicalModal from '../MedicalModal/ViewModal';
 import {
     Table,
     TableBody,
@@ -13,6 +12,9 @@ import {
     TableHeader,
     TableRow,
 } from './TableComponents';
+import ViewMedicalModal from '../MedicalModal/ViewMedicalModal';
+import { useState } from 'react';
+import ViewPrescriptionModal from '../MedicalModal/ViewPrescription';
 const DoctorTableComponent = () => {
     return (
         <Table>
@@ -41,15 +43,22 @@ const DoctorTableComponent = () => {
                             <TableCell>
                                 <div>
                                     <div className="flex items-center gap-x-4">
-                                        <ViewMedicalModal
+                                        {/* <ViewMedicalModal
                                             name={invoice.name}
                                             age={invoice.age}
                                             gender={invoice.gender}
                                             type={'forDoctor'}
+                                        /> */}
+                                        <ViewMedicalModal
+                                            name={invoice.name}
+                                            age={invoice.age}
+                                            gender={invoice.gender}
+                                            bloodType={invoice.bloodType}
+                                            diagnosis={invoice.diagnoses}
                                         />
 
                                         <div className="border-2 rounded-xl px-4 py-2 cursor-pointer">
-                                            Validate
+                                            Verify
                                         </div>
                                     </div>
                                     <div className="font-medium gap-x-1 pt-2 text-sm flex pl-4">
@@ -63,13 +72,16 @@ const DoctorTableComponent = () => {
                             </TableCell>
 
                             <TableCell className="w-fit flex items-center gap-x-4">
-                                <DoctorModal
-                                    // name={invoice.name}
-                                    // age={invoice.age}
-                                    // gender={invoice.gender}
-                                    attestationId={invoice.attestationId}
-                                    address={invoice.address}
-                                />
+                            
+                                    <DoctorModal
+                                        name={invoice.name}
+                                        age={invoice.age}
+                                        gender={invoice.gender}
+                                        attestationId={invoice.attestationId}
+                                        address={invoice.address}
+                                  
+                                    />
+                            
                             </TableCell>
                             <TableCell className="text-right">
                                 {invoice.paymentStatus}

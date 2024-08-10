@@ -20,6 +20,8 @@ export const invoices = [
         paymentStatus: 'Pending',
         date: '2024-08-7',
         address: '0x0F284B92d59C8b59E11409495bE0c5e7dBe0dAf9',
+        diagnoses: 'Hypertension',
+        bloodType: 'A+',
     },
     {
         invoice: '2',
@@ -61,6 +63,8 @@ export const invoices = [
             proof: [],
             proofFlags: [true, true, true],
         },
+        diagnoses: 'Sugar',
+        bloodType: 'B+',
     },
     {
         invoice: '3',
@@ -71,6 +75,8 @@ export const invoices = [
         date: '2024-08-15',
         address: '0x260f9FdfD971395634E92b3D574182befb63B33d',
         attestationId: '',
+        diagnoses: 'Kidney Stone',
+        bloodType: 'AB+',
     },
     {
         invoice: '4',
@@ -81,6 +87,8 @@ export const invoices = [
         date: '2024-08-21',
         address: '0x8a052Be15eC984320Ae940CBDCCCf8f97BeF1a09',
         attestationId: '',
+        diagnoses: 'Dengue',
+        bloodType: 'B+',
     },
     {
         invoice: '5',
@@ -91,6 +99,8 @@ export const invoices = [
         date: '2024-08-22',
         address: '0xBb0Ad5E4AA60EE7393e7E51B5071B9b7DC5bbd44',
         attestationId: '',
+        diagnoses: 'Thyphoid',
+        bloodType: 'AB-',
     },
     {
         invoice: '6',
@@ -101,6 +111,8 @@ export const invoices = [
         date: '2024-08-25',
         address: '0xEF8817ef9D776605dD2fF7ae87c7103915F0630f',
         attestationId: '',
+        diagnoses: 'Malaria',
+        bloodType: 'A+',
     },
     {
         invoice: '7',
@@ -111,5 +123,7 @@ export const invoices = [
         date: '2024-08-28',
         address: '0x8a052Be15eC984320Ae940CBDCCCf8f97BeF1a09',
         attestationId: '',
+        diagnoses: 'Malaria',
+        bloodType: 'A+',
     },
 ];

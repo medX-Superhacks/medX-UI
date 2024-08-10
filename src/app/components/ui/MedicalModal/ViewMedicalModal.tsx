@@ -9,17 +9,18 @@ import {
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Input } from '../Input';
-import { useAppSelector } from '@/redux/hooks';
 const ViewMedicalModal = ({
     name,
     age,
     gender,
-    type,
+    bloodType,
+    diagnosis,
 }: {
     name: string;
     age: number;
     gender: string;
-    type?: string;
+    bloodType: string;
+    diagnosis: string;
 }) => {
     const [isOpen, setIsOpen] = useState(false);
     function open() {
@@ -29,9 +30,6 @@ const ViewMedicalModal = ({
     function close() {
         setIsOpen(false);
     }
-    const doctorAnalysis = useAppSelector(
-        (state) => state.storeZkProof.doctorAnalysis
-    );
     return (
         <>
             <div
@@ -121,58 +119,35 @@ const ViewMedicalModal = ({
                                                 disabled
                                             />
                                         </div>
-                                        {type === 'forDoctor' && (
-                                            <>
-                                                <div className="text-black pt-2">
-                                                    <label
-                                                        htmlFor="name"
-                                                        className="text-sm"
-                                                    >
-                                                        Medication
-                                                    </label>
-                                                    <Input
-                                                        type="text"
-                                                        id="medication"
-                                                        value={
-                                                            doctorAnalysis.medication
-                                                        }
-                                                        disabled
-                                                    />
-                                                </div>
-                                                <div className="text-black pt-2">
-                                                    <label
-                                                        htmlFor="name"
-                                                        className="text-sm"
-                                                    >
-                                                        Dosage
-                                                    </label>
-                                                    <Input
-                                                        type="text"
-                                                        id="Dosage"
-                                                        value={
-                                                            doctorAnalysis.dosage
-                                                        }
-                                                        disabled
-                                                    />
-                                                </div>
-                                                <div className="text-black pt-2">
-                                                    <label
-                                                        htmlFor="name"
-                                                        className="text-sm"
-                                                    >
-                                                        Duration
-                                                    </label>
-                                                    <Input
-                                                        type="text"
-                                                        id="Duration"
-                                                        value={
-                                                            doctorAnalysis.duration
-                                                        }
-                                                        disabled
-                                                    />
-                                                </div>
-                                            </>
-                                        )}
+
+                                        <div className="text-black pt-2">
+                                            <label
+                                                htmlFor="name"
+                                                className="text-sm"
+                                            >
+                                                Diagnosis
+                                            </label>
+                                            <Input
+                                                type="text"
+                                                id="medication"
+                                                value={diagnosis}
+                                                disabled
+                                            />
+                                        </div>
+                                        <div className="text-black pt-2">
+                                            <label
+                                                htmlFor="name"
+                                                className="text-sm"
+                                            >
+                                                Blood Type
+                                            </label>
+                                            <Input
+                                                type="text"
+                                                id="Dosage"
+                                                value={bloodType}
+                                                disabled
+                                            />
+                                        </div>
                                     </motion.div>
                                 </DialogPanel>
                             </TransitionChild>
