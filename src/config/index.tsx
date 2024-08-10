@@ -20,9 +20,13 @@ export const invoices = [
         paymentStatus: 'Pending',
         date: '2024-08-7',
         address: '0x0F284B92d59C8b59E11409495bE0c5e7dBe0dAf9',
-        diagnoses: '',
-        bloodType: '',
+        diagnoses: 'Hypertension',
+        bloodType: 'A+',
         attestationId: '',
+        docId: true,
+        medication: 'Dolo 650',
+        dosage: '3 times a day',
+        duration: '5 days',
     },
     {
         invoice: '2',
@@ -34,6 +38,7 @@ export const invoices = [
         address: '0x2cac89ABf06DbE5d3a059517053B7144074e1CE5',
         attestationId:
             '0x93de545a2b9d199f4026fca07be7ba8309b54157994f21a07c71ce4efa4d7fce',
+        docId: false,
         zkProof: {
             leaves: [
                 {
@@ -66,6 +71,9 @@ export const invoices = [
         },
         diagnoses: 'Sugar',
         bloodType: 'B+',
+        medication: '',
+        dosage: '',
+        duration: '',
     },
     {
         invoice: '3',
@@ -78,6 +86,10 @@ export const invoices = [
         attestationId: '',
         diagnoses: 'Kidney Stone',
         bloodType: 'AB+',
+        docId: true,
+        medication: 'Paracetamol',
+        dosage: '2 times a day',
+        duration: '3 days',
     },
     {
         invoice: '4',
@@ -91,6 +103,10 @@ export const invoices = [
             '0x2e18018691a06926a1a2adc9d178a37f8f4e5d56bdd0e6e482632189fd645023',
         diagnoses: 'Dengue',
         bloodType: 'B+',
+        docId: false,
+        medication: '',
+        dosage: '',
+        duration: '',
         zkProof: {
             leaves: [
                 {
@@ -130,10 +146,46 @@ export const invoices = [
         paymentStatus: 'Completed',
         date: '2024-08-22',
         address: '0xBb0Ad5E4AA60EE7393e7E51B5071B9b7DC5bbd44',
+        docAttestationId:
+            '0xf78c62a519dbdbf530041f21e32d443aa3f7269ef842965cfc0c3e1efd887ce6',
         attestationId:
             '0x203b81b3abf10d073da53bf541f36d527e486574d42a3fc80405ca288778ec1d',
         diagnoses: 'Thyphoid',
         bloodType: 'AB-',
+        docId: true,
+        medication: 'Zifi 650',
+        dosage: '2 times a day',
+        duration: '5 days',
+        docZkProof: {
+            leaves: [
+                {
+                    type: 'string',
+                    name: 'duration',
+                    value: '3days',
+                    salt: '0x794f1d45a9697ea4408a08bca53eb56cda816eb117f3c7f708653e00374b8982',
+                },
+                {
+                    type: 'string',
+                    name: 'medication',
+                    value: 'Dolo',
+                    salt: '0x198f78b936591b0253bb9d0ecc3693cd08b1002ec72e06d6b1a8aa62f130c4b9',
+                },
+                {
+                    type: 'string',
+                    name: 'prescriptionId',
+                    value: '7919077899',
+                    salt: '0xa6ef9f50895bcdecf39cde2d5626f639beeb8dcfd463d8296b3c0916dd4bfe1d',
+                },
+                {
+                    type: 'string',
+                    name: 'dosage',
+                    value: '2',
+                    salt: '0xd09665c9e71bc8d0ca7afd8999b3a87869898b541a073b625d1b5432bf9e51a5',
+                },
+            ],
+            proof: [],
+            proofFlags: [true, true, true],
+        },
         zkProof: {
             leaves: [
                 {
@@ -176,7 +228,11 @@ export const invoices = [
         attestationId:
             '0xc9386f29a92566b4c863b07c3e158712bfa382b704faa223cf4a5e5ec40ba028',
         diagnoses: 'Malaria',
+        docId: true,
         bloodType: 'A+',
+        medication: 'Combiflam',
+        dosage: '1 times a day',
+        duration: '2 days',
         zkProof: {
             leaves: [
                 {
@@ -219,7 +275,11 @@ export const invoices = [
         attestationId:
             '0x4e305f7bec8436efec639358b39acdccceb0d04189f541f5f9587a7f0d5add7b',
         diagnoses: 'Malaria',
+        docId: true,
         bloodType: 'A+',
+        medication: 'Dolo 650',
+        dosage: '3 times a day',
+        duration: '5 days',
         zkProof: {
             leaves: [
                 {

@@ -14,10 +14,16 @@ const ViewPrescriptionModal = ({
     name,
     age,
     gender,
+    medication,
+    dosage,
+    duration,
 }: {
     name: string;
     age: number;
     gender: string;
+    medication?: string;
+    dosage?: string;
+    duration?: string;
 }) => {
     const [isOpen, setIsOpen] = useState(false);
     function open() {
@@ -131,7 +137,8 @@ const ViewPrescriptionModal = ({
                                                 type="text"
                                                 id="medication"
                                                 value={
-                                                    doctorAnalysis.medication
+                                                    doctorAnalysis.medication ||
+                                                    medication
                                                 }
                                                 disabled
                                             />
@@ -146,7 +153,10 @@ const ViewPrescriptionModal = ({
                                             <Input
                                                 type="text"
                                                 id="Dosage"
-                                                value={doctorAnalysis.dosage}
+                                                value={
+                                                    doctorAnalysis.dosage ||
+                                                    dosage
+                                                }
                                                 disabled
                                             />
                                         </div>
@@ -160,7 +170,10 @@ const ViewPrescriptionModal = ({
                                             <Input
                                                 type="text"
                                                 id="Duration"
-                                                value={doctorAnalysis.duration}
+                                                value={
+                                                    doctorAnalysis.duration ||
+                                                    duration
+                                                }
                                                 disabled
                                             />
                                         </div>

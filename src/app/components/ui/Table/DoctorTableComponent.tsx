@@ -13,7 +13,30 @@ import {
     TableHeader,
     TableRow,
 } from './TableComponents';
+import toast from 'react-hot-toast';
 const DoctorTableComponent = () => {
+    const handleCopyStatic = (attestationId: string, zkProof: any) => {
+        const targetEasID = attestationId;
+        navigator.clipboard
+            .writeText(JSON.stringify(zkProof))
+            .then(() => {
+                toast.success('Zk proof copied to clipboard');
+                toast.loading(
+                    'You will be redirected to the external link shortly.'
+                );
+                setTimeout(() => {
+                    toast.dismiss();
+                    window.open(
+                        `https://base-sepolia.easscan.org/attestation/view/${targetEasID}`,
+                        '_blank'
+                    );
+                }, 5000);
+            })
+            .catch((err) => {
+                toast.error('Failed to copy Zk proof to clipboard');
+                console.error('Error copying to clipboard:', err);
+            });
+    };
     return (
         <Table>
             <TableCaption>A list of your recent records.</TableCaption>
@@ -49,7 +72,15 @@ const DoctorTableComponent = () => {
                                             diagnoses={invoice.diagnoses}
                                         />
 
-                                        <div className="border-2 rounded-xl px-4 py-2 cursor-pointer">
+                                        <div
+                                            className="border-2 rounded-xl px-4 py-2 cursor-pointer"
+                                            onClick={() =>
+                                                handleCopyStatic(
+                                                    invoice.attestationId,
+                                                    invoice.zkProof
+                                                )
+                                            }
+                                        >
                                             Verify
                                         </div>
                                     </div>
@@ -69,11 +100,23 @@ const DoctorTableComponent = () => {
                                     age={invoice.age}
                                     gender={invoice.gender}
                                     attestationId={invoice.attestationId}
+                                    docID={invoice.docId}
                                     address={invoice.address}
+                                    medication={invoice.medication}
+                                    dosage={invoice.dosage}
+                                    duration={invoice.duration}
                                 />
                             </TableCell>
                             <TableCell className="text-right">
-                                {invoice.paymentStatus}
+                                {invoice.name === 'Alice Johnson'
+                                    ? 'Completed'
+                                    : invoice.name === 'Bob Frank'
+                                    ? 'Pending'
+                                    : invoice.name === 'Bunny'
+                                    ? 'Completed'
+                                    : invoice.name === 'Martin'
+                                    ? 'Pending'
+                                    : invoice.paymentStatus}
                             </TableCell>
                         </TableRow>
                     );

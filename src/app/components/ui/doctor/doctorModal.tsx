@@ -31,13 +31,21 @@ const DoctorModal = ({
     age,
     gender,
     attestationId,
+    docID,
     address,
+    medication,
+    dosage,
+    duration,
 }: {
     name: string;
     age: number;
     gender: string;
     attestationId?: string;
+    docID: boolean;
     address: string;
+    medication: string;
+    dosage: string;
+    duration: string;
 }) => {
     const [isCreated, setIsCreated] = useState(false);
     const signer = useSigner();
@@ -164,10 +172,35 @@ const DoctorModal = ({
                         <CiCircleCheck color="green" size={25} />
                     </div>
                 </div>
+            ) : docID ? (
+                <div>
+                    <div className="flex items-center gap-x-4">
+                        <ViewPrescriptionModal
+                            name={name}
+                            age={age}
+                            gender={gender}
+                            medication={medication}
+                            dosage={dosage}
+                            duration={duration}
+                        />
+                        <div
+                            className="border-2 rounded-xl px-4 py-2 cursor-pointer"
+                            // onClick={() =>
+                            //     handleCopyStatic(attestationId, zkProof)
+                            // }
+                        >
+                            Verify
+                        </div>
+                    </div>
+                    <div className="font-medium justify-center gap-x-1 pt-2 text-sm flex items-center">
+                        Onchain Attested
+                        <CiCircleCheck color="green" size={25} />
+                    </div>
+                </div>
             ) : (
                 <Button
                     onClick={open}
-                    className="bg-themelinear px-6 py-2 text-sm  rounded-lg font-semibold cursor-pointer text-white "
+                    className="w-full bg-themelinear px-6 py-2 text-sm  rounded-lg font-semibold cursor-pointer text-white "
                 >
                     Create
                 </Button>
