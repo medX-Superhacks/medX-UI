@@ -13,14 +13,14 @@ const ViewMedicalModal = ({
     name,
     age,
     gender,
+    diagnoses,
     bloodType,
-    diagnosis,
 }: {
     name: string;
     age: number;
     gender: string;
+    diagnoses: string;
     bloodType: string;
-    diagnosis: string;
 }) => {
     const [isOpen, setIsOpen] = useState(false);
     function open() {
@@ -130,7 +130,7 @@ const ViewMedicalModal = ({
                                             <Input
                                                 type="text"
                                                 id="medication"
-                                                value={diagnosis}
+                                                value={diagnoses}
                                                 disabled
                                             />
                                         </div>

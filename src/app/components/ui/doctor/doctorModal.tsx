@@ -150,7 +150,6 @@ const DoctorModal = ({
                             name={name}
                             age={age}
                             gender={gender}
-                            type={'forDoctor'}
                         />
 
                         <div

@@ -8,6 +8,7 @@ import {
     TransitionChild,
 } from '@headlessui/react';
 import { createMedicalRecordAttestation } from '@/app/lib/func';
+import { CiCircleCheck } from 'react-icons/ci';
 import { RiExternalLinkLine } from 'react-icons/ri';
 import { CiBellOn } from 'react-icons/ci';
 import { fetchAndLogAttestations } from '@/app/lib/query';
@@ -23,6 +24,7 @@ import Dropdown from '../Dropdown';
 import toast from 'react-hot-toast';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { setEasID, storeProof } from '@/redux/reducer/zkProof';
+import ViewMedicalModal from '../MedicalModal/ViewMedicalModal';
 const bloodType = [
     { id: 1, name: 'A+' },
     { id: 2, name: 'A-' },
@@ -36,17 +38,25 @@ export default function ProviderModal({
     age,
     gender,
     address,
+    attestationId,
+    zkProof,
 }: {
     name: string;
     age: number;
     gender: string;
     address: string;
+    attestationId: string;
+    zkProof: any;
 }) {
     const [isOpen, setIsOpen] = useState(false);
+    const [isCreated, setIsCreated] = useState(false);
     const [insured, setInsured] = useState(true);
     const [diagnose, setDiagnose] = useState('');
     const [loading, setLoading] = useState(false);
     const [currentState, setCurrentState] = useState(0);
+    const { leaves, proof, proofFlags } = useAppSelector(
+        (state) => state.storeZkProof
+    );
     const easID = useAppSelector((state) => state.storeZkProof.easID);
     const dispatch = useAppDispatch();
     function open() {
@@ -60,11 +70,58 @@ export default function ProviderModal({
     const { client } = useSmartAccountClient({
         type: 'LightAccount',
     });
+    const handleCopy = () => {
+        const targetEasID = easID;
+        const data = { leaves, proof, proofFlags };
+        navigator.clipboard
+            .writeText(JSON.stringify(data))
+            .then(() => {
+                toast.success('Zk proof copied to clipboard');
+                toast.loading(
+                    'You will be redirected to the external link shortly.'
+                );
+                setTimeout(() => {
+                    toast.dismiss();
+                    window.open(
+                        `https://base-sepolia.easscan.org/attestation/view/${targetEasID}`,
+                        '_blank'
+                    );
+                }, 5000);
+            })
+            .catch((err) => {
+                toast.error('Failed to copy Zk proof to clipboard');
+                console.error('Error copying to clipboard:', err);
+            });
+    };
+
+    const handleCopyStatic = (attestationId: string, zkProof: any) => {
+        const targetEasID = attestationId;
+        navigator.clipboard
+            .writeText(JSON.stringify(zkProof))
+            .then(() => {
+                toast.success('Zk proof copied to clipboard');
+                toast.loading(
+                    'You will be redirected to the external link shortly.'
+                );
+                setTimeout(() => {
+                    toast.dismiss();
+                    window.open(
+                        `https://base-sepolia.easscan.org/attestation/view/${targetEasID}`,
+                        '_blank'
+                    );
+                }, 5000);
+            })
+            .catch((err) => {
+                toast.error('Failed to copy Zk proof to clipboard');
+                console.error('Error copying to clipboard:', err);
+            });
+    };
     const { sendUserOperation } = useSendUserOperation({
         client,
         // optional parameter that will wait for the transaction to be mined before returning
         waitForTxn: true,
         onSuccess: async ({ hash }: { hash: any }) => {
+            console.log(hash);
             setLoading(false);
             const res: any = await fetchAndLogAttestations({
                 txid: {
@@ -75,6 +132,7 @@ export default function ProviderModal({
             if (res.length > 0) {
                 dispatch(setEasID(res[0].id));
                 setCurrentState(1);
+                setIsCreated(true);
             }
         },
         onError: (error) => {
@@ -106,12 +164,60 @@ export default function ProviderModal({
     };
     return (
         <>
-            <Button
-                onClick={open}
-                className="bg-themelinear px-6 py-2 text-sm  rounded-lg font-semibold cursor-pointer text-white "
-            >
-                Create record
-            </Button>
+            {isCreated ? (
+                <div>
+                    <div className="flex items-center gap-x-4">
+                        <ViewMedicalModal
+                            name={name}
+                            age={age}
+                            gender={gender}
+                            diagnoses={diagnose}
+                            bloodType={'A+'}
+                        />
+                        <div
+                            className="border-2 rounded-xl px-4 py-2 cursor-pointer"
+                            onClick={() => handleCopy()}
+                        >
+                            Validate
+                        </div>
+                    </div>
+                    <div className="font-medium justify-center gap-x-1 pt-2 text-sm flex items-center">
+                        Onchain Attested
+                        <CiCircleCheck color="green" size={25} />
+                    </div>
+                </div>
+            ) : attestationId ? (
+                <div>
+                    <div className="flex items-center gap-x-4">
+                        <ViewMedicalModal
+                            name={name}
+                            age={age}
+                            gender={gender}
+                            diagnoses={diagnose}
+                            bloodType={'A+'}
+                        />
+                        <div
+                            className="border-2 rounded-xl px-4 py-2 cursor-pointer"
+                            onClick={() =>
+                                handleCopyStatic(attestationId, zkProof)
+                            }
+                        >
+                            Validate
+                        </div>
+                    </div>
+                    <div className="font-medium justify-center gap-x-1 pt-2 text-sm flex items-center">
+                        Onchain Attested
+                        <CiCircleCheck color="green" size={25} />
+                    </div>
+                </div>
+            ) : (
+                <Button
+                    onClick={open}
+                    className="bg-themelinear px-6 py-2 text-sm  rounded-lg font-semibold cursor-pointer text-white "
+                >
+                    Create record
+                </Button>
+            )}
             <Transition appear show={isOpen}>
                 <Dialog
                     open={isOpen}

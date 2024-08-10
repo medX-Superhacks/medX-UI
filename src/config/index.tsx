@@ -20,44 +20,45 @@ export const invoices = [
         paymentStatus: 'Pending',
         date: '2024-08-7',
         address: '0x0F284B92d59C8b59E11409495bE0c5e7dBe0dAf9',
-        diagnoses: 'Hypertension',
-        bloodType: 'A+',
+        diagnoses: '',
+        bloodType: '',
+        attestationId: '',
     },
     {
         invoice: '2',
         name: 'Bob Frank',
         age: 35,
         gender: 'Male',
-        paymentStatus: 'Pending',
+        paymentStatus: 'Completed',
         date: '2024-08-11',
         address: '0x2cac89ABf06DbE5d3a059517053B7144074e1CE5',
         attestationId:
-            '0xdddf7e66d559e286124c9e729c57296ea6dc21e8f560c22075aaf40bbda4438d',
+            '0x93de545a2b9d199f4026fca07be7ba8309b54157994f21a07c71ce4efa4d7fce',
         zkProof: {
             leaves: [
                 {
                     type: 'bool',
                     name: 'isInsured',
                     value: true,
-                    salt: '0xbff4cfe3ea83682de72630bc163a50ca55c5f26e7d0b0e76cc008ad7d29b4e06',
+                    salt: '0x9612aa6bc7b220aadab798f256a27292d8e315b11921010badb860721621aa16',
                 },
                 {
                     type: 'string',
                     name: 'name',
                     value: 'Bob Frank',
-                    salt: '0xf6ba4ff760dc4dccc581bbd580465e67bcc516bade26e5e4b7cdec0f4320f742',
-                },
-                {
-                    type: 'uint256',
-                    name: 'age',
-                    value: '35',
-                    salt: '0x18c3a51012a320fad60f34f7b8dd7e1f0d2c250deb678300543fff5ed852869e',
+                    salt: '0xcc2b63b6b65545630c66b55676698eaef367e66409dd7b39154ee569c38a52c6',
                 },
                 {
                     type: 'string',
                     name: 'diagnosis',
                     value: 'hypertension',
-                    salt: '0xd3ab7057a1386d840b332c79f1a651692f31cf0a6c41cd2fefbf7a7ceb0deaa6',
+                    salt: '0x396bcb69ab756cd34f85930da57491e9c0aea9102af8a77f0168939178c461ed',
+                },
+                {
+                    type: 'uint256',
+                    name: 'age',
+                    value: '35',
+                    salt: '0xec5835436e53c117bb92afdaca3f17049fc90340a8b1423c9b0337b9d2ad7f35',
                 },
             ],
             proof: [],
@@ -71,7 +72,7 @@ export const invoices = [
         name: 'Bunny',
         age: 20,
         gender: 'Male',
-        paymentStatus: 'Completed',
+        paymentStatus: 'Pending',
         date: '2024-08-15',
         address: '0x260f9FdfD971395634E92b3D574182befb63B33d',
         attestationId: '',
@@ -86,9 +87,40 @@ export const invoices = [
         paymentStatus: 'Completed',
         date: '2024-08-21',
         address: '0x8a052Be15eC984320Ae940CBDCCCf8f97BeF1a09',
-        attestationId: '',
+        attestationId:
+            '0x2e18018691a06926a1a2adc9d178a37f8f4e5d56bdd0e6e482632189fd645023',
         diagnoses: 'Dengue',
         bloodType: 'B+',
+        zkProof: {
+            leaves: [
+                {
+                    type: 'uint256',
+                    name: 'age',
+                    value: '34',
+                    salt: '0x1fcc6eba53c5e9c4e4f427f1a818cb749a0216d16a90818ffa96b1db63a02bc4',
+                },
+                {
+                    type: 'bool',
+                    name: 'isInsured',
+                    value: true,
+                    salt: '0x2be232c659f729b6e0da2d0b268df0a7c2bee6e177dd08510138e42402550731',
+                },
+                {
+                    type: 'string',
+                    name: 'name',
+                    value: 'Martin',
+                    salt: '0xdf4e26bfba50a275f582b4dba82528428022453b6f366e40299c6a3d6ad0dd98',
+                },
+                {
+                    type: 'string',
+                    name: 'diagnosis',
+                    value: 'Sugar',
+                    salt: '0xa90b5fa3fd187060dbb6456ab00d6b2687caa6c598a2c67a5e7f930663d676d4',
+                },
+            ],
+            proof: [],
+            proofFlags: [true, true, true],
+        },
     },
     {
         invoice: '5',
@@ -98,9 +130,40 @@ export const invoices = [
         paymentStatus: 'Completed',
         date: '2024-08-22',
         address: '0xBb0Ad5E4AA60EE7393e7E51B5071B9b7DC5bbd44',
-        attestationId: '',
+        attestationId:
+            '0x203b81b3abf10d073da53bf541f36d527e486574d42a3fc80405ca288778ec1d',
         diagnoses: 'Thyphoid',
         bloodType: 'AB-',
+        zkProof: {
+            leaves: [
+                {
+                    type: 'string',
+                    name: 'diagnosis',
+                    value: 'Tuberclauses',
+                    salt: '0x21adc7e44b7dcde9ad79618795bad7e386434dc89362296c83edf106333d462a',
+                },
+                {
+                    type: 'string',
+                    name: 'name',
+                    value: 'Steve',
+                    salt: '0x5ed78c0cdde3f867064b1ebe23fd1dd72075a4253640bd628329510ff7bcebe8',
+                },
+                {
+                    type: 'bool',
+                    name: 'isInsured',
+                    value: true,
+                    salt: '0x63aa5c5fd76bd22b78685268436a954b43932ccaa4b3b07ff6f4f6cad2347699',
+                },
+                {
+                    type: 'uint256',
+                    name: 'age',
+                    value: '55',
+                    salt: '0x78dff191990c9bd6418dfeff0858a0655b2e61371fe0fb9e0d4e6c1d180aba93',
+                },
+            ],
+            proof: [],
+            proofFlags: [true, true, true],
+        },
     },
     {
         invoice: '6',
@@ -110,9 +173,40 @@ export const invoices = [
         paymentStatus: 'Completed',
         date: '2024-08-25',
         address: '0xEF8817ef9D776605dD2fF7ae87c7103915F0630f',
-        attestationId: '',
+        attestationId:
+            '0xc9386f29a92566b4c863b07c3e158712bfa382b704faa223cf4a5e5ec40ba028',
         diagnoses: 'Malaria',
         bloodType: 'A+',
+        zkProof: {
+            leaves: [
+                {
+                    type: 'uint256',
+                    name: 'age',
+                    value: '66',
+                    salt: '0xda1993e6ef39d10044f825d1aab3a7674a84b3a2e4ace04643e5d0563dbcd8af',
+                },
+                {
+                    type: 'bool',
+                    name: 'isInsured',
+                    value: true,
+                    salt: '0x52f18761c17577d247096f8f2bf29bfa7de2c9d29cfb5589eb42abda5bf4a24c',
+                },
+                {
+                    type: 'string',
+                    name: 'name',
+                    value: 'Roman',
+                    salt: '0xde1c2d39716264f7b7473c0356c9dac666c1d38de7d63f6cd92839343f1aab37',
+                },
+                {
+                    type: 'string',
+                    name: 'diagnosis',
+                    value: 'Dengue',
+                    salt: '0x0b55845eff5fea0102a18bb2773f79e760769da8a90b0a0c49e0dc2700eaba8d',
+                },
+            ],
+            proof: [],
+            proofFlags: [true, true, true],
+        },
     },
     {
         invoice: '7',
@@ -122,8 +216,39 @@ export const invoices = [
         paymentStatus: 'Completed',
         date: '2024-08-28',
         address: '0x8a052Be15eC984320Ae940CBDCCCf8f97BeF1a09',
-        attestationId: '',
+        attestationId:
+            '0x4e305f7bec8436efec639358b39acdccceb0d04189f541f5f9587a7f0d5add7b',
         diagnoses: 'Malaria',
         bloodType: 'A+',
+        zkProof: {
+            leaves: [
+                {
+                    type: 'bool',
+                    name: 'isInsured',
+                    value: true,
+                    salt: '0xab10ed0870ebd7efd375102eacde07a7db7758157379ef4b94812d2675b4b5f0',
+                },
+                {
+                    type: 'string',
+                    name: 'name',
+                    value: 'Dwane',
+                    salt: '0x63c7c1cd86eb3948c076817f15cc78a3067fa2d5b2c62f44f3a7663d2b8818ed',
+                },
+                {
+                    type: 'string',
+                    name: 'diagnosis',
+                    value: 'Malaria',
+                    salt: '0xfe3ee102fc35e3596ff0dc6b1be033d3ff08e26724ee1d39d5bc9ad26c6478f0',
+                },
+                {
+                    type: 'uint256',
+                    name: 'age',
+                    value: '76',
+                    salt: '0xe821a3c7d6a71489bafeed221b68f37e8a1f30a1ca94214ffb6ac36db02a867c',
+                },
+            ],
+            proof: [],
+            proofFlags: [true, true, true],
+        },
     },
 ];
