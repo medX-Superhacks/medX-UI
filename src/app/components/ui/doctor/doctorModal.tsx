@@ -1,4 +1,14 @@
 'use client';
+import { generateId } from '@/app/lib';
+import { createPrescriptionAttestation } from '@/app/lib/func';
+import { fetchAndLogAttestations } from '@/app/lib/query';
+import { useAppDispatch, useAppSelector } from '@/redux/hooks';
+import { setDoctorEasID } from '@/redux/reducer/zkProof';
+import {
+    useSendUserOperation,
+    useSigner,
+    useSmartAccountClient,
+} from '@account-kit/react';
 import {
     Button,
     Dialog,
@@ -7,48 +17,32 @@ import {
     Transition,
     TransitionChild,
 } from '@headlessui/react';
-import { createMedicalRecordAttestation } from '@/app/lib/func';
-import { RiExternalLinkLine } from 'react-icons/ri';
-import { CiBellOn } from 'react-icons/ci';
-import { fetchAndLogAttestations } from '@/app/lib/query';
-import {
-    useSendUserOperation,
-    useSigner,
-    useSmartAccountClient,
-} from '@account-kit/react';
 import { motion } from 'framer-motion';
 import { useState } from 'react';
-import { Input } from '../Input';
-import Dropdown from '../Dropdown';
 import toast from 'react-hot-toast';
-import { useAppDispatch, useAppSelector } from '@/redux/hooks';
-import { setEasID, storeProof } from '@/redux/reducer/zkProof';
-const bloodType = [
-    { id: 1, name: 'A+' },
-    { id: 2, name: 'A-' },
-    { id: 3, name: 'B+' },
-    { id: 4, name: 'B-' },
-    { id: 5, name: 'AB+' },
-    { id: 6, name: 'AB-' },
-];
-export default function ProviderModal({
-    name,
-    age,
-    gender,
+import { RiExternalLinkLine } from 'react-icons/ri';
+import { Input } from '../Input';
+
+const DoctorModal = ({
+    attestationId,
     address,
 }: {
-    name: string;
-    age: number;
-    gender: string;
+    attestationId?: string;
     address: string;
-}) {
+}) => {
+    const signer = useSigner();
     const [isOpen, setIsOpen] = useState(false);
-    const [insured, setInsured] = useState(true);
-    const [diagnose, setDiagnose] = useState('');
-    const [loading, setLoading] = useState(false);
     const [currentState, setCurrentState] = useState(0);
-    const easID = useAppSelector((state) => state.storeZkProof.easID);
+    const [loading, setLoading] = useState(false);
     const dispatch = useAppDispatch();
+    const doctorEasID = useAppSelector(
+        (state) => state.storeZkProof.doctorEasID
+    );
+    const [doctorAnalysis, setDoctorAnalysis] = useState({
+        medication: '',
+        dosage: '',
+        duration: '',
+    });
     function open() {
         setIsOpen(true);
     }
@@ -56,7 +50,6 @@ export default function ProviderModal({
     function close() {
         setIsOpen(false);
     }
-    const signer = useSigner();
     const { client } = useSmartAccountClient({
         type: 'LightAccount',
     });
@@ -71,9 +64,9 @@ export default function ProviderModal({
                     equals: hash,
                 },
             });
-
+            console.log(res);
             if (res.length > 0) {
-                dispatch(setEasID(res[0].id));
+                dispatch(setDoctorEasID(res[0].id));
                 setCurrentState(1);
             }
         },
@@ -83,22 +76,23 @@ export default function ProviderModal({
             toast.error('Something went wrong');
         },
     });
-    const handleCreateRecord = async () => {
+    const handleCreatePrescription = async () => {
         setLoading(true);
-        const resp: any = await createMedicalRecordAttestation(
-            name,
-            age,
-            insured,
-            diagnose,
+        const newId = generateId();
+        const resp = await createPrescriptionAttestation(
+            newId.toString(),
+            doctorAnalysis.medication,
+            doctorAnalysis.dosage,
+            doctorAnalysis.duration,
             address,
-            signer
+            signer,
+            attestationId
         );
         if (resp.data) {
             const sender: any = {
                 target: resp.data.to,
                 data: resp.data.data,
             };
-            dispatch(storeProof(resp.zkProofMedicalRecord));
             sendUserOperation({
                 uo: sender,
             });
@@ -110,7 +104,7 @@ export default function ProviderModal({
                 onClick={open}
                 className="bg-themelinear px-6 py-2 text-sm  rounded-lg font-semibold cursor-pointer text-white "
             >
-                Create record
+                Create
             </Button>
             <Transition appear show={isOpen}>
                 <Dialog
@@ -149,21 +143,33 @@ export default function ProviderModal({
                                                 as="h3"
                                                 className=" font-medium text-black"
                                             >
-                                                Patient Details
+                                                Fill Details
                                             </DialogTitle>
                                             <div className="text-black pt-2">
                                                 <label
                                                     htmlFor="name"
                                                     className="text-sm"
                                                 >
-                                                    Name
+                                                    Medication*
                                                 </label>
                                                 <Input
                                                     type="text"
-                                                    id="name"
+                                                    id="medication"
                                                     className="mt-2"
-                                                    value={name}
-                                                    disabled
+                                                    placeholder="Add Medication"
+                                                    value={
+                                                        doctorAnalysis.medication
+                                                    }
+                                                    onChange={(e) =>
+                                                        setDoctorAnalysis(
+                                                            (prevState) => ({
+                                                                ...prevState,
+                                                                medication:
+                                                                    e.target
+                                                                        .value,
+                                                            })
+                                                        )
+                                                    }
                                                 />
                                             </div>
                                             <div className="text-black pt-2">
@@ -171,14 +177,25 @@ export default function ProviderModal({
                                                     htmlFor="name"
                                                     className="text-sm"
                                                 >
-                                                    Age
+                                                    Dosage*
                                                 </label>
                                                 <Input
-                                                    type="number"
-                                                    id="age"
-                                                    value={age}
+                                                    type="text"
+                                                    id="dosage"
                                                     className="mt-2"
-                                                    disabled
+                                                    placeholder="Add Dosage"
+                                                    value={
+                                                        doctorAnalysis.dosage
+                                                    }
+                                                    onChange={(e) =>
+                                                        setDoctorAnalysis(
+                                                            (prevState) => ({
+                                                                ...prevState,
+                                                                dosage: e.target
+                                                                    .value,
+                                                            })
+                                                        )
+                                                    }
                                                 />
                                             </div>
                                             <div className="text-black pt-2">
@@ -186,113 +203,38 @@ export default function ProviderModal({
                                                     htmlFor="name"
                                                     className="text-sm"
                                                 >
-                                                    Gender
+                                                    Duration
                                                 </label>
                                                 <Input
                                                     type="text"
-                                                    id="gender"
-                                                    value={gender}
+                                                    id="Duration"
                                                     className="mt-2"
-                                                    disabled
+                                                    placeholder="Add Duration"
+                                                    value={
+                                                        doctorAnalysis.duration
+                                                    }
+                                                    onChange={(e) =>
+                                                        setDoctorAnalysis(
+                                                            (prevState) => ({
+                                                                ...prevState,
+                                                                duration:
+                                                                    e.target
+                                                                        .value,
+                                                            })
+                                                        )
+                                                    }
                                                 />
-                                            </div>
-                                            <div className="text-black pt-2">
-                                                <label
-                                                    htmlFor="name"
-                                                    className="text-sm"
-                                                >
-                                                    Diagnosis*
-                                                </label>
-                                                <Input
-                                                    type="text"
-                                                    id="diagnosis"
-                                                    className="mt-2"
-                                                    value={diagnose}
-                                                    onChange={(e) => {
-                                                        setDiagnose(
-                                                            e.target.value
-                                                        );
-                                                    }}
-                                                />
-                                            </div>
-                                            <div className="text-black pt-4 flex items-center justify-between">
-                                                <div className="text-sm ">
-                                                    <label
-                                                        htmlFor="name"
-                                                        className="text-sm"
-                                                    >
-                                                        Blood Type*
-                                                    </label>
-                                                    <div className="pt-2">
-                                                        <Dropdown
-                                                            data={bloodType}
-                                                        />
-                                                    </div>
-                                                </div>
-                                                <div>
-                                                    <label
-                                                        htmlFor="name"
-                                                        className="text-sm"
-                                                    >
-                                                        Is insured*
-                                                    </label>
-                                                    <div className="flex items-center pt-2">
-                                                        <input
-                                                            type="radio"
-                                                            id="yes"
-                                                            name="insured"
-                                                            value="yes"
-                                                            checked={
-                                                                insured === true
-                                                            }
-                                                            onChange={() => {
-                                                                setInsured(
-                                                                    true
-                                                                );
-                                                            }}
-                                                        />
-
-                                                        <label
-                                                            htmlFor="html"
-                                                            className="pl-1"
-                                                        >
-                                                            Yes
-                                                        </label>
-                                                        <div className="pl-5">
-                                                            <input
-                                                                type="radio"
-                                                                id="no"
-                                                                name="insured"
-                                                                value="no"
-                                                                checked={
-                                                                    insured ===
-                                                                    false
-                                                                }
-                                                                onChange={() => {
-                                                                    setInsured(
-                                                                        false
-                                                                    );
-                                                                }}
-                                                            />
-                                                            <label
-                                                                htmlFor="html"
-                                                                className="pl-1"
-                                                            >
-                                                                No
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                </div>
                                             </div>
                                             <div className="mt-4">
                                                 {loading ? (
                                                     <div className="text-center mt-10 bg-green-200 px-5 py-2  w-full rounded-lg">
-                                                        Generating record...
+                                                        Generating
+                                                        Prescription...
                                                     </div>
                                                 ) : (
                                                     <Button
                                                         onClick={() =>
-                                                            handleCreateRecord()
+                                                            handleCreatePrescription()
                                                         }
                                                         className={`inline-flex items-center mt-2 gap-2 rounded-md bg-gray-700 py-1.5 px-3 text-sm/6 font-semibold text-white shadow-inner shadow-white/10 focus:outline-none data-[hover]:bg-gray-600 data-[focus]:outline-1 data-[focus]:outline-white data-[open]:bg-gray-700`}
                                                     >
@@ -317,25 +259,18 @@ export default function ProviderModal({
                                                 as="h3"
                                                 className="flex items-center gap-x-2 font-medium text-black"
                                             >
-                                                Medical Record created
+                                                Prescription created
                                                 successfully
                                                 <a
                                                     target="_blank"
                                                     rel="noreferrer"
-                                                    href={`https://base-sepolia.easscan.org/attestation/view/${easID}`}
+                                                    href={`https://base-sepolia.easscan.org/attestation/view/${doctorEasID}`}
                                                 >
                                                     <RiExternalLinkLine
                                                         size={20}
                                                     />
                                                 </a>
                                             </DialogTitle>
-                                            <div className="flex items-center w-fit mt-5 bg-themelinear px-6 py-2 text-sm  rounded-lg font-semibold cursor-pointer text-white ">
-                                                Notify Doctor and Patient{'   '}
-                                                <CiBellOn
-                                                    size={20}
-                                                    className="ml-2"
-                                                />
-                                            </div>
                                         </motion.div>
                                     )}
                                 </DialogPanel>
@@ -346,4 +281,6 @@ export default function ProviderModal({
             </Transition>
         </>
     );
-}
+};
+
+export default DoctorModal;

@@ -14,6 +14,7 @@ interface ZkProofState {
     proof: any[];
     proofFlags: boolean[];
     easID: string; // New state property for easID
+    doctorEasID: string;
 }
 
 // Initial state
@@ -21,7 +22,8 @@ const initialState: ZkProofState = {
     leaves: [],
     proof: [],
     proofFlags: [],
-    easID: '', // Initialize easID
+    easID: '',
+    doctorEasID: '',
 };
 
 // Create the slice
@@ -43,9 +45,12 @@ const storeZkProof = createSlice({
         setEasID: (state, action: PayloadAction<string>) => {
             state.easID = action.payload;
         },
+        setDoctorEasID: (state, action: PayloadAction<string>) => {
+            state.doctorEasID = action.payload;
+        },
     },
 });
 
 // Export the action and reducer
-export const { storeProof, setEasID } = storeZkProof.actions;
+export const { storeProof, setEasID, setDoctorEasID } = storeZkProof.actions;
 export default storeZkProof;
