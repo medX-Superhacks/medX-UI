@@ -21,6 +21,8 @@ import { useState } from 'react';
 import { Input } from '../Input';
 import Dropdown from '../Dropdown';
 import toast from 'react-hot-toast';
+import { useAppDispatch, useAppSelector } from '@/redux/hooks';
+import { setEasID, storeProof } from '@/redux/reducer/zkProof';
 const bloodType = [
     { id: 1, name: 'A+' },
     { id: 2, name: 'A-' },
@@ -45,7 +47,8 @@ export default function ProviderModal({
     const [diagnose, setDiagnose] = useState('');
     const [loading, setLoading] = useState(false);
     const [currentState, setCurrentState] = useState(0);
-    const [easID, setEasId] = useState('');
+    const easID = useAppSelector((state) => state.storeZkProof.easID);
+    const dispatch = useAppDispatch();
     function open() {
         setIsOpen(true);
     }
@@ -62,15 +65,15 @@ export default function ProviderModal({
         // optional parameter that will wait for the transaction to be mined before returning
         waitForTxn: true,
         onSuccess: async ({ hash }: { hash: any }) => {
-            console.log(hash);
             setLoading(false);
             const res: any = await fetchAndLogAttestations({
                 txid: {
                     equals: hash,
                 },
             });
+
             if (res.length > 0) {
-                setEasId(res[0].id);
+                dispatch(setEasID(res[0].id));
                 setCurrentState(1);
             }
         },
@@ -82,7 +85,7 @@ export default function ProviderModal({
     });
     const handleCreateRecord = async () => {
         setLoading(true);
-        const resp = await createMedicalRecordAttestation(
+        const resp: any = await createMedicalRecordAttestation(
             name,
             age,
             insured,
@@ -95,7 +98,7 @@ export default function ProviderModal({
                 target: resp.data.to,
                 data: resp.data.data,
             };
-
+            dispatch(storeProof(resp.zkProofMedicalRecord));
             sendUserOperation({
                 uo: sender,
             });
