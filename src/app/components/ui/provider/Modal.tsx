@@ -10,8 +10,13 @@ import {
 import { createMedicalRecordAttestation } from '@/app/lib/func';
 import { CiCircleCheck } from 'react-icons/ci';
 import { RiExternalLinkLine } from 'react-icons/ri';
+import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
 import { CiBellOn } from 'react-icons/ci';
 import { fetchAndLogAttestations } from '@/app/lib/query';
+import hcaImage from '../../../../../public/assets/HcaImg.png';
+import WldImg from '../../../../../public/assets/world-id-2.png';
+import WldLogo from '../../../../../public/assets/worldCoinlogo.png';
+import Image from 'next/image';
 import {
     useSendUserOperation,
     useSigner,
@@ -184,12 +189,44 @@ export default function ProviderModal({
                             className="border-2 rounded-xl px-4 py-2 cursor-pointer"
                             onClick={() => handleCopy()}
                         >
-                            Validate
+                            Verify
                         </div>
                     </div>
                     <div className="font-medium justify-center gap-x-1 pt-2 text-sm flex items-center">
-                        Onchain Attested
                         <CiCircleCheck color="green" size={25} />
+                        <Image
+                            src={hcaImage}
+                            alt="hclHealthcare Image"
+                            width={40}
+                        />
+                        <div className=" ">
+                            <Menu>
+                                <MenuButton className="inline-flex items-center gap-2 rounded-md  py-1.5 px-3 text-sm/6 font-semibold text-white shadow-inner shadow-white/10 focus:outline-none   data-[focus]:outline-1 data-[focus]:outline-white">
+                                    <Image
+                                        src={WldLogo}
+                                        alt="wldCoinlogo"
+                                        width={20}
+                                    />
+                                </MenuButton>
+
+                                <MenuItems
+                                    transition
+                                    anchor="right start"
+                                    className="w-52 origin-top-right rounded-lg border bg-slate-200   text-sm/6 text-black transition duration-100 ease-out [--anchor-gap:var(--spacing-1)] focus:outline-none data-[closed]:scale-95 data-[closed]:opacity-0"
+                                >
+                                    <MenuItem>
+                                        <button className="group flex w-full  items-center gap-2 rounded-lg py-1 px-3 ">
+                                            <Image
+                                                src={WldImg}
+                                                alt="hclHealthcare Image"
+                                                width={35}
+                                            />
+                                            World id verified
+                                        </button>
+                                    </MenuItem>
+                                </MenuItems>
+                            </Menu>
+                        </div>
                     </div>
                 </div>
             ) : attestationId ? (
@@ -208,12 +245,44 @@ export default function ProviderModal({
                                 handleCopyStatic(attestationId, zkProof)
                             }
                         >
-                            Validate
+                            Verify
                         </div>
                     </div>
                     <div className="font-medium justify-center gap-x-1 pt-2 text-sm flex items-center">
-                        Onchain Attested
                         <CiCircleCheck color="green" size={25} />
+                        <Image
+                            src={hcaImage}
+                            alt="hclHealthcare Image"
+                            width={40}
+                        />
+                        <div className=" ">
+                            <Menu>
+                                <MenuButton className="inline-flex items-center gap-2 rounded-md  py-1.5 px-3 text-sm/6 font-semibold text-white shadow-inner shadow-white/10 focus:outline-none   data-[focus]:outline-1 data-[focus]:outline-white">
+                                    <Image
+                                        src={WldLogo}
+                                        alt="wldCoinlogo"
+                                        width={20}
+                                    />
+                                </MenuButton>
+
+                                <MenuItems
+                                    transition
+                                    anchor="right start"
+                                    className="w-40 origin-top-right rounded-lg border bg-slate-200   text-xs text-black transition duration-100 ease-out [--anchor-gap:var(--spacing-1)] focus:outline-none data-[closed]:scale-95 data-[closed]:opacity-0"
+                                >
+                                    <MenuItem>
+                                        <button className="group flex w-full  items-center  rounded-lg py-1 px-1 ">
+                                            <Image
+                                                src={WldImg}
+                                                alt="hclHealthcare Image"
+                                                width={30}
+                                            />
+                                            World id verified
+                                        </button>
+                                    </MenuItem>
+                                </MenuItems>
+                            </Menu>
+                        </div>
                     </div>
                 </div>
             ) : (

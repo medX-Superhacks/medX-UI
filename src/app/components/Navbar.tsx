@@ -9,6 +9,7 @@ import alchemyLogo from '../../../public/assets/alchemy.png';
 import { shortenAddress } from '../lib';
 import WordId from './wordId';
 import { usePathname } from 'next/navigation';
+import eacLogo from '@/../../public/assets/EasLogo.png';
 const Navbar = () => {
     const { address } = useAccount({
         type: 'LightAccount',
@@ -26,20 +27,26 @@ const Navbar = () => {
                         >
                             MedX
                         </Link>
-                        {pathname === '/home' && (
+
+                        {pathname === '/home' ? (
                             <Link
                                 href={'/view-records'}
                                 className="capitalize text-sm text-[#157D7A]"
                             >
                                 View records
                             </Link>
-                        )}
+                        ) : pathname === '/verified-doctor' ||
+                          pathname === '/healthcare-provider' ? (
+                            <Image src={eacLogo} alt="EacLogo" width={80} />
+                        ) : null}
                     </div>
                     {address ? (
                         <div className="flex items-center gap-x-3">
-                            <span className="cursor-pointer text-[#157D7A] hover:underline ">
-                                <WordId />
-                            </span>
+                            {pathname === '/home' && (
+                                <span className="cursor-pointer text-[#157D7A] hover:underline ">
+                                    <WordId />
+                                </span>
+                            )}
                             <RxAvatar size={30} />
                             <div
                                 className="cursor-pointer hover:underline"

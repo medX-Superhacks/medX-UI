@@ -191,7 +191,7 @@ export default function Modal() {
                                                     as="h3"
                                                     className=" font-medium text-black"
                                                 >
-                                                    Select chains
+                                                    Payment
                                                 </DialogTitle>
                                                 <Payment
                                                     setBlockLink={setBlockLink}
