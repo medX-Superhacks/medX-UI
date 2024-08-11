@@ -31,9 +31,9 @@ medX is a decentralized healthcare platform designed to securely manage patient 
   - **Description**: Alchemy powers several key functionalities within medX, ensuring a seamless and secure user experience across the platform.
   - **Key Features**:
     - **Smart Account Creation**: Automatically creates Smart Accounts on-chain when users sign in with their email, streamlining the onboarding process.
-      - **Code Reference**: See `authService.js` in the `/backend/services/` directory for the implementation of Smart Account creation using Alchemy.
+      - **Code Reference**: See [Smart Account creation](https://github.com/medX-Superhacks/medX-UI/blob/2b9afab3a6f0a4780fab07ffba5e5e896b11c7d2/src/app/page.tsx#L88) for the implementation of Smart Account creation using Alchemy.
     - **Sponsored Transactions**: Covers gas fees for all actors in medX—patients, doctors, and healthcare providers—ensuring smooth on-chain attestations and payments without financial friction.
-      - **Code Reference**: Check out `transactionManager.js` in the `/backend/utils/` directory to see how Alchemy’s sponsored transactions are handled for different actors.
+      - **Code Reference**: Check out [Sponser transactions](https://github.com/medX-Superhacks/medX-UI/blob/2b9afab3a6f0a4780fab07ffba5e5e896b11c7d2/src/app/components/ui/doctor/doctorModal.tsx#L135) to see how Alchemy’s sponsored transactions are handled for different actors.
 
 - **Ethereum Account Service (EAS)**
   - **Description**: EAS is integral to medX for ensuring the secure and private management of medical records on-chain.
@@ -41,9 +41,9 @@ medX is a decentralized healthcare platform designed to securely manage patient 
     - **Private Schema on Base-Sepolia**: Utilized to ensure that while records are stored on-chain, the privacy of user data is maintained.
       - **Code Reference**:
     - **zkProofs Generation**: Generates zkProofs to ensure that only verified parties can access and view the medical records.
-      - **Code Reference**: Check `zkProofManager.js` in the `/frontend/libs/` directory to see how zkProofs are generated and verified.
+      - **Code Reference**: Check [ZkProof Generation](https://github.com/medX-Superhacks/medX-UI/blob/2b9afab3a6f0a4780fab07ffba5e5e896b11c7d2/src/app/lib/func.tsx) to see how zkProofs are generated and verified.
     - **GraphQL APIs for Attestation Fetching**: Uses EAS service’s GraphQL APIs to fetch relevant attestations and load them on the frontend.
-      - **Code Reference**:
+      - **Code Reference**: [GraphQL Github](https://github.com/medX-Superhacks/medX-UI/blob/2b9afab3a6f0a4780fab07ffba5e5e896b11c7d2/src/app/components/ui/doctor/doctorModal.tsx#L146)
  
 
 - **Chainlink CCIP**
@@ -57,7 +57,10 @@ medX is a decentralized healthcare platform designed to securely manage patient 
   - **Description**: World ID is integrated into medX to verify the identity of healthcare providers, ensuring that only trusted professionals are part of the platform.
   - **Key Features**:
     - **Provider Verification**: Ensures that doctors and healthcare providers are authenticated during onboarding to maintain the trust and integrity of the platform.
-      - **Code Reference**:
+      - **Code Reference**: [World ID integration](https://github.com/medX-Superhacks/medX-UI/blob/2b9afab3a6f0a4780fab07ffba5e5e896b11c7d2/src/app/components/wordId.tsx#L33)
+
+- **Blockscout**
+      - **Code Reference**: [Blockscout Payment redirects](https://github.com/medX-Superhacks/medX-UI/blob/2b9afab3a6f0a4780fab07ffba5e5e896b11c7d2/src/app/components/ui/Modal.tsx#L231)
 
 ## 📜 Deployed Contracts
 
