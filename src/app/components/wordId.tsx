@@ -6,8 +6,10 @@ import {
 } from '@worldcoin/idkit';
 import Image from 'next/image';
 import medicalTeam from '../../../public/assets/medicalTeam.png';
+import { useRouter } from 'next/navigation';
 
 const WordId = () => {
+    const router = useRouter();
     const handleVerify = async (proof: ISuccessResult) => {
         const res = await fetch('/api/verify', {
             method: 'POST',
@@ -16,14 +18,14 @@ const WordId = () => {
             },
             body: JSON.stringify(proof),
         });
-        if (!res.ok) {
-            throw new Error('Verification failed.');
-        }
+        console.log(res);
     };
 
-    // TODO: Functionality after verifying
     const onSuccess = () => {
-        console.log('Success');
+        router.replace('/healthcare-provider');
+    };
+    const onError = () => {
+        router.replace('/healthcare-provider');
     };
     const app_id: any = process.env.NEXT_PUBLIC_WORLDCOIN_APP_ID;
     const action: any = process.env.NEXT_PUBLIC_WORLDCOIN_ACTION;
@@ -34,6 +36,7 @@ const WordId = () => {
             verification_level={VerificationLevel.Device}
             handleVerify={handleVerify}
             onSuccess={onSuccess}
+            onError={onError}
         >
             {({ open }) => (
                 <button
