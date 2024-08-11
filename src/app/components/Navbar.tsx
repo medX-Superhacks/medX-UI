@@ -19,7 +19,7 @@ const Navbar = () => {
             <div className="border-b-2  border-black h-fit px-10">
                 <div className="container mx-auto w-full  flex justify-between py-5 ">
                     <Link
-                        href={'/'}
+                        href={'/home'}
                         className="bg-themelinear  bg-clip-text text-transparent text-4xl font-extrabold"
                     >
                         MedX

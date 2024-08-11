@@ -16,6 +16,7 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import { Autoplay, Navigation } from 'swiper/modules';
 import Image from 'next/image';
+import Link from 'next/link';
 
 const inClinicOpds = [
     {
@@ -88,31 +89,39 @@ const InclinicSection = () => {
                 </div>
             </div>
             <div className="flex justify-around items-center">
-                <Swiper
-                    slidesPerView={4}
-                    autoplay={{
-                        delay: 2500,
-                        disableOnInteraction: false,
-                    }}
-                    navigation={true}
-                    modules={[Autoplay, Navigation]}
-                    className="mySwiper"
-                >
-                    {inClinicOpds.map((opd) => (
-                        <SwiperSlide key={opd.id} className="p-4">
-                            <Image
-                                src={opd.image}
-                                alt={opd.name}
-                                className="border border-[#52D2CF]  rounded-md p-4"
-                            />
-                            <h1 className="font-bold text-lg ">{opd.name}</h1>
-                            <p className="text-sm">{opd.dis}</p>
-                        </SwiperSlide>
-                    ))}
-                </Swiper>
+                <ConsultaionSwiper />
             </div>
         </div>
     );
 };
 
 export default InclinicSection;
+const ConsultaionSwiper = () => {
+    return (
+        <Swiper
+            // direction={'vertical'}
+            slidesPerView={4}
+            autoplay={{
+                delay: 2500,
+                disableOnInteraction: false,
+            }}
+            navigation={true}
+            modules={[Autoplay, Navigation]}
+            className="mySwiper"
+        >
+            {inClinicOpds.map((opd) => (
+                <Link href="/doctors" key={opd.id}>
+                    <SwiperSlide className="p-4 cursor-pointer">
+                        <Image
+                            src={opd.image}
+                            alt={opd.name}
+                            className="border border-[#52D2CF]  rounded-md p-4"
+                        />
+                        <h1 className="font-bold text-lg ">{opd.name}</h1>
+                        <p className="text-sm">{opd.dis}</p>
+                    </SwiperSlide>
+                </Link>
+            ))}
+        </Swiper>
+    );
+};

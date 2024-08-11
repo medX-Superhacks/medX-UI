@@ -9,6 +9,7 @@ import {
     urologyImg,
 } from '../../../../public/assets/index';
 import Image from 'next/image';
+import Link from 'next/link';
 
 const opds = [
     {
@@ -62,12 +63,14 @@ const OpdSelection = () => {
                         specialty.
                     </p>
                 </div>{' '}
-                <button className="group/button  relative overflow-hidden rounded-md border border-[#52D2CF] bg-white px-4 py-1 text-sm font-medium text-[#157D7A] transition-all duration-150 hover:border-[#1a3d3c] active:scale-95">
-                    <span className="absolute bottom-0 left-0 z-0 h-0 w-full bg-gradient-to-t from-[#4ab7b3] to-[#19d5cf] transition-all duration-500 group-hover/button:h-full" />
-                    <span className="relative z-10 transition-all duration-500 group-hover/button:text-white">
-                        Explore All Specialties
-                    </span>
-                </button>
+                <Link href="/doctors">
+                    <button className="group/button  relative overflow-hidden rounded-md border border-[#52D2CF] bg-white px-4 py-1 text-sm font-medium text-[#157D7A] transition-all duration-150 hover:border-[#1a3d3c] active:scale-95">
+                        <span className="absolute bottom-0 left-0 z-0 h-0 w-full bg-gradient-to-t from-[#4ab7b3] to-[#19d5cf] transition-all duration-500 group-hover/button:h-full" />
+                        <span className="relative z-10 transition-all duration-500 group-hover/button:text-white">
+                            Explore All Specialties
+                        </span>
+                    </button>
+                </Link>
             </div>
             <div className="flex justify-around  items-center ">
                 {opds.map((opd) => {
@@ -82,12 +85,14 @@ const OpdSelection = () => {
                                 className=" border border-[#52D2CF]  rounded-lg p-3 w-36 "
                             />
                             <h1>{opd.opdName}</h1>
-                            <button className="group/button  relative overflow-hidden rounded-md border border-[#52D2CF] bg-white px-4 py-1 text-sm font-medium text-[#157D7A] transition-all duration-150 hover:border-[#1a3d3c] active:scale-95">
-                                <span className="absolute bottom-0 left-0 z-0 h-0 w-full bg-gradient-to-t from-[#4ab7b3] to-[#19d5cf] transition-all duration-500 group-hover/button:h-full" />
-                                <span className="relative z-10 transition-all duration-500 group-hover/button:text-white">
-                                    CONSULT NOW
-                                </span>
-                            </button>
+                            <Link href="/doctors">
+                                <button className="group/button  relative overflow-hidden rounded-md border border-[#52D2CF] bg-white px-4 py-1 text-sm font-medium text-[#157D7A] transition-all duration-150 hover:border-[#1a3d3c] active:scale-95">
+                                    <span className="absolute bottom-0 left-0 z-0 h-0 w-full bg-gradient-to-t from-[#4ab7b3] to-[#19d5cf] transition-all duration-500 group-hover/button:h-full" />
+                                    <span className="relative z-10 transition-all duration-500 group-hover/button:text-white">
+                                        CONSULT NOW
+                                    </span>
+                                </button>
+                            </Link>
                         </div>
                     );
                 })}
