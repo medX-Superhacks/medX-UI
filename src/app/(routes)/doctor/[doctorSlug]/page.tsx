@@ -3,7 +3,8 @@ import Dropdown from '@/app/components/ui/Dropdown';
 import Modal from '@/app/components/ui/Modal';
 import { RadioGroupDemo } from '@/app/components/ui/RadioButton/radioButton';
 import { DOCTOR_PROFILE } from '@/config';
-
+import usdcLogo from '../../../../../public/assets/usdcLogo.png';
+import Image from 'next/image';
 const DoctorProfile = () => {
     const reason = [
         { id: 1, name: 'Wound Care' },
@@ -64,9 +65,17 @@ const DoctorProfile = () => {
                                     {hospitals}
                                 </p>
                             </div>
-                            <div className="text-md text-gray-600 pt-5">
+                            <div className="text-md  text-gray-600 pt-5">
                                 Fees
-                                <p className="text-sm font-normal">{fees}</p>
+                                <p className="text-sm font-normal flex gap-1">
+                                    {fees}
+                                    <Image
+                                        src={usdcLogo}
+                                        alt="usdclogo"
+                                        width={20}
+                                        height={10}
+                                    />
+                                </p>
                             </div>
                         </div>
                     </div>

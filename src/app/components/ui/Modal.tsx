@@ -14,12 +14,16 @@ import { Input } from './Input';
 import Payment from '../Payment';
 import { IoIosCheckmarkCircleOutline } from 'react-icons/io';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
+import { TbExternalLink } from 'react-icons/tb';
 import { userData } from '@/redux/reducer/userData';
 import toast from 'react-hot-toast';
 import { validationCheck } from '@/app/lib';
+import BlockScout from '../../../../public/assets/blockscout.svg';
+import Image from 'next/image';
 export default function Modal() {
     let [isOpen, setIsOpen] = useState(false);
     const [currentState, setCurrentState] = useState(0);
+    const [blockLink, setBlockLink] = useState('');
     function open() {
         setIsOpen(true);
     }
@@ -187,9 +191,10 @@ export default function Modal() {
                                                     as="h3"
                                                     className=" font-medium text-black"
                                                 >
-                                                    Select chains
+                                                    Payment
                                                 </DialogTitle>
                                                 <Payment
+                                                    setBlockLink={setBlockLink}
                                                     setCurrentState={
                                                         setCurrentState
                                                     }
@@ -219,7 +224,21 @@ export default function Modal() {
                                                     />
                                                 </DialogTitle>
                                                 <div className="pt-5 underline cursor-pointer">
-                                                    <a href="">Payment link</a>
+                                                    <a
+                                                        target="_blank"
+                                                        className="flex items-center gap-x-2"
+                                                        rel="noreferrer"
+                                                        href={`https://base-sepolia.blockscout.com/tx/${blockLink}`}
+                                                    >
+                                                        Payment link
+                                                        <TbExternalLink />
+                                                        <Image
+                                                            src={BlockScout}
+                                                            alt="blockscout"
+                                                            height={90}
+                                                            width={90}
+                                                        />
+                                                    </a>
                                                 </div>
                                             </motion.div>
                                         </AnimatePresence>

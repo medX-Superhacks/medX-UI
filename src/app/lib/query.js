@@ -10,8 +10,8 @@ const graphqlEndpoint = 'https://base-sepolia.easscan.org/graphql';
  */
 const getAttestations = async (where) => {
     const query = gql`
-        query Attestations($where: AttestationWhereInput) {
-            attestations(where: $where) {
+        query Attestations($orderBy: [AttestationOrderByWithRelationInput!], $take: Int, $where: AttestationWhereInput) {
+            attestations(orderBy: $orderBy, take: $take, where: $where) {
                 id
                 recipient
                 time
@@ -21,7 +21,7 @@ const getAttestations = async (where) => {
 
     const variables = {
         where,
-        orderBy: { date: 'desc' }, // Order by time in descending order
+        orderBy: [{ time: 'desc' }], // Order by time in descending order
         take: 7, // Limit to the first 7 entries
     };
 

@@ -1,37 +1,52 @@
 'use client';
 import { useAccount, useLogout } from '@account-kit/react';
-import React, { useState } from 'react';
-import { RxExternalLink } from 'react-icons/rx';
-import { RxAvatar } from 'react-icons/rx';
-import { shortenAddress } from '../lib';
-import { FaPowerOff } from 'react-icons/fa6';
+import Image from 'next/image';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
+import { FaPowerOff } from 'react-icons/fa6';
+import { RxAvatar, RxExternalLink } from 'react-icons/rx';
+import alchemyLogo from '../../../public/assets/alchemy.png';
+import { shortenAddress } from '../lib';
 import WordId from './wordId';
+import { usePathname } from 'next/navigation';
+import eacLogo from '@/../../public/assets/EasLogo.png';
 const Navbar = () => {
     const { address } = useAccount({
         type: 'LightAccount',
     });
     const { logout } = useLogout();
-
+    const pathname = usePathname();
     return (
         <>
-            <div className="border-b-2 border border-black h-fit">
+            <div className="border-b-2  border-black h-fit px-10">
                 <div className="container mx-auto w-full  flex justify-between py-5 ">
-                    <Link
-                        href={'/'}
-                        className="bg-themelinear  bg-clip-text text-transparent text-4xl font-extrabold"
-                    >
-                        MedX
-                    </Link>
+                    <div className="flex items-center gap-x-8">
+                        <Link
+                            href={'/home'}
+                            className="bg-themelinear  bg-clip-text text-transparent text-4xl font-extrabold"
+                        >
+                            MedX
+                        </Link>
 
+                        {pathname === '/home' ? (
+                            <Link
+                                href={'/view-records'}
+                                className="capitalize text-sm text-[#157D7A]"
+                            >
+                                View records
+                            </Link>
+                        ) : pathname === '/verified-doctor' ||
+                          pathname === '/healthcare-provider' ? (
+                            <Image src={eacLogo} alt="EacLogo" width={80} />
+                        ) : null}
+                    </div>
                     {address ? (
                         <div className="flex items-center gap-x-3">
-                            Are you a provider/doctor ?
-                            <span className="cursor-pointer text-[#157D7A] hover:underline ">
-                                <WordId />
-                      
-                            </span>
+                            {pathname === '/home' && (
+                                <span className="cursor-pointer text-[#157D7A] hover:underline ">
+                                    <WordId />
+                                </span>
+                            )}
                             <RxAvatar size={30} />
                             <div
                                 className="cursor-pointer hover:underline"
@@ -49,6 +64,11 @@ const Navbar = () => {
                             <FaPowerOff
                                 className="cursor-pointer"
                                 onClick={() => logout()}
+                            />
+                            <Image
+                                src={alchemyLogo}
+                                alt="alchemyLogo"
+                                width={25}
                             />
                         </div>
                     ) : (

@@ -1,75 +1,82 @@
 'use client';
-import {
-    Button,
-    Dialog,
-    DialogPanel,
-    DialogTitle,
-    Transition,
-    TransitionChild,
-} from '@headlessui/react';
-import { createMedicalRecordAttestation } from '@/app/lib/func';
-import { CiCircleCheck } from 'react-icons/ci';
-import { RiExternalLinkLine } from 'react-icons/ri';
-import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
-import { CiBellOn } from 'react-icons/ci';
+import { generateId } from '@/app/lib';
+import { createPrescriptionAttestation } from '@/app/lib/func';
 import { fetchAndLogAttestations } from '@/app/lib/query';
-import hcaImage from '../../../../../public/assets/HcaImg.png';
-import WldImg from '../../../../../public/assets/world-id-2.png';
-import WldLogo from '../../../../../public/assets/worldCoinlogo.png';
-import Image from 'next/image';
+import { useAppDispatch, useAppSelector } from '@/redux/hooks';
+import { storeDoctorProof } from '@/redux/reducer/doctorZk';
+import { setDoctorAnalysis, setDoctorEasID } from '@/redux/reducer/zkProof';
 import {
     useSendUserOperation,
     useSigner,
     useSmartAccountClient,
 } from '@account-kit/react';
+import {
+    Button,
+    Dialog,
+    DialogPanel,
+    DialogTitle,
+    Menu,
+    MenuButton,
+    MenuItem,
+    MenuItems,
+    Transition,
+    TransitionChild,
+} from '@headlessui/react';
 import { motion } from 'framer-motion';
 import { useState } from 'react';
-import { Input } from '../Input';
-import Dropdown from '../Dropdown';
 import toast from 'react-hot-toast';
-import { useAppDispatch, useAppSelector } from '@/redux/hooks';
-import { setEasID, storeProof } from '@/redux/reducer/zkProof';
-import ViewMedicalModal from '../MedicalModal/ViewMedicalModal';
-const bloodType = [
-    { id: 1, name: 'A+' },
-    { id: 2, name: 'A-' },
-    { id: 3, name: 'B+' },
-    { id: 4, name: 'B-' },
-    { id: 5, name: 'AB+' },
-    { id: 6, name: 'AB-' },
-];
-export default function ProviderModal({
+import { CiBellOn, CiCircleCheck } from 'react-icons/ci';
+import { RiExternalLinkLine } from 'react-icons/ri';
+import { RxAvatar } from 'react-icons/rx';
+import WldImg from '../../../../../public/assets/world-id-2.png';
+import WldLogo from '../../../../../public/assets/worldCoinlogo.png';
+import { Input } from '../Input';
+import ViewPrescriptionModal from '../MedicalModal/ViewPrescription';
+import Image from 'next/image';
+
+const DoctorModal = ({
     name,
     age,
     gender,
-    address,
     attestationId,
-    zkProof,
-    diagnoseVal,
+    docID,
+    address,
+    medication,
+    dosage,
+    duration,
     isCreated,
     setIsCreated,
+    docAttestationId,
+    docZk,
 }: {
     name: string;
     age: number;
     gender: string;
+    attestationId?: string;
+    docID: boolean;
     address: string;
-    attestationId: string;
-    zkProof: any;
-    diagnoseVal: string;
+    medication: string;
+    dosage: string;
+    duration: string;
     isCreated: boolean;
     setIsCreated: React.Dispatch<React.SetStateAction<boolean>>;
-}) {
+    docAttestationId?: string;
+    docZk?: any;
+}) => {
+    const signer = useSigner();
     const [isOpen, setIsOpen] = useState(false);
-
-    const [insured, setInsured] = useState(true);
-    const [diagnose, setDiagnose] = useState('');
-    const [loading, setLoading] = useState(false);
     const [currentState, setCurrentState] = useState(0);
-    const { leaves, proof, proofFlags } = useAppSelector(
-        (state) => state.storeZkProof
+    const [loading, setLoading] = useState(false);
+    const doctorAnalysis = useAppSelector(
+        (state) => state.storeZkProof.doctorAnalysis
     );
-    const easID = useAppSelector((state) => state.storeZkProof.easID);
+    const { leaves, proof, proofFlags } = useAppSelector(
+        (state) => state.doctorZkProof
+    );
     const dispatch = useAppDispatch();
+    const doctorEasID = useAppSelector(
+        (state) => state.storeZkProof.doctorEasID
+    );
     function open() {
         setIsOpen(true);
     }
@@ -77,12 +84,8 @@ export default function ProviderModal({
     function close() {
         setIsOpen(false);
     }
-    const signer = useSigner();
-    const { client } = useSmartAccountClient({
-        type: 'LightAccount',
-    });
     const handleCopy = () => {
-        const targetEasID = easID;
+        const targetEasID = doctorEasID;
         const data = { leaves, proof, proofFlags };
         navigator.clipboard
             .writeText(JSON.stringify(data))
@@ -104,7 +107,6 @@ export default function ProviderModal({
                 console.error('Error copying to clipboard:', err);
             });
     };
-
     const handleCopyStatic = (attestationId: string, zkProof: any) => {
         const targetEasID = attestationId;
         navigator.clipboard
@@ -127,6 +129,9 @@ export default function ProviderModal({
                 console.error('Error copying to clipboard:', err);
             });
     };
+    const { client } = useSmartAccountClient({
+        type: 'LightAccount',
+    });
     const { sendUserOperation } = useSendUserOperation({
         client,
         // optional parameter that will wait for the transaction to be mined before returning
@@ -134,6 +139,10 @@ export default function ProviderModal({
         onSuccess: async ({ hash }: { hash: any }) => {
             console.log(hash);
             setLoading(false);
+
+            // Add a delay of 4 seconds
+            await new Promise((resolve) => setTimeout(resolve, 4000));
+
             const res: any = await fetchAndLogAttestations({
                 txid: {
                     equals: hash,
@@ -141,71 +150,72 @@ export default function ProviderModal({
             });
 
             if (res.length > 0) {
-                dispatch(setEasID(res[0].id));
+                dispatch(setDoctorEasID(res[0].id));
                 setCurrentState(1);
                 setIsCreated(true);
             }
         },
+
         onError: (error) => {
             console.log(error);
             setLoading(false);
             toast.error('Something went wrong');
         },
     });
-    const handleCreateRecord = async () => {
+
+    const handleCreatePrescription = async () => {
         setLoading(true);
-        const resp: any = await createMedicalRecordAttestation(
-            name,
-            age,
-            insured,
-            diagnose,
+        const newId = generateId();
+        const resp: any = await createPrescriptionAttestation(
+            newId.toString(),
+            doctorAnalysis.medication,
+            doctorAnalysis.dosage,
+            doctorAnalysis.duration,
             address,
-            signer
+            signer,
+            attestationId
         );
         if (resp.data) {
             const sender: any = {
                 target: resp.data.to,
                 data: resp.data.data,
             };
-            dispatch(storeProof(resp.zkProofMedicalRecord));
+            dispatch(storeDoctorProof(resp.zkProofPrescription));
             sendUserOperation({
                 uo: sender,
             });
         }
     };
+
     return (
         <>
             {isCreated ? (
                 <div>
-                    <div className="flex items-center gap-x-4">
-                        <ViewMedicalModal
+                    <div className="flex items-center gap-x-2">
+                        <ViewPrescriptionModal
                             name={name}
                             age={age}
                             gender={gender}
-                            diagnoses={diagnose}
-                            bloodType={'A+'}
                         />
+
                         <div
-                            className="border-2 rounded-xl px-4 py-2 cursor-pointer"
-                            onClick={() => handleCopy()}
+                            className="border-2 rounded-xl p-2 cursor-pointer"
+                            onClick={handleCopy}
                         >
                             Verify
                         </div>
                     </div>
                     <div className="font-medium justify-center gap-x-1 pt-2 text-sm flex items-center">
                         <CiCircleCheck color="green" size={25} />
-                        <Image
-                            src={hcaImage}
-                            alt="hclHealthcare Image"
-                            width={40}
-                        />
+                        <RxAvatar size={20} />
+                        <span>Dr Shikha </span>
                         <div className=" ">
                             <Menu>
                                 <MenuButton className="inline-flex items-center gap-2 rounded-md  py-1.5 px-3 text-sm/6 font-semibold text-white shadow-inner shadow-white/10 focus:outline-none   data-[focus]:outline-1 data-[focus]:outline-white">
                                     <Image
                                         src={WldLogo}
                                         alt="wldCoinlogo"
-                                        width={20}
+                                        width={15}
                                     />
                                 </MenuButton>
 
@@ -219,7 +229,7 @@ export default function ProviderModal({
                                             <Image
                                                 src={WldImg}
                                                 alt="hclHealthcare Image"
-                                                width={35}
+                                                width={30}
                                             />
                                             World id verified
                                         </button>
@@ -229,20 +239,21 @@ export default function ProviderModal({
                         </div>
                     </div>
                 </div>
-            ) : attestationId ? (
+            ) : docID ? (
                 <div>
                     <div className="flex items-center gap-x-4">
-                        <ViewMedicalModal
+                        <ViewPrescriptionModal
                             name={name}
                             age={age}
                             gender={gender}
-                            diagnoses={diagnoseVal}
-                            bloodType={'A+'}
+                            medication={medication}
+                            dosage={dosage}
+                            duration={duration}
                         />
                         <div
                             className="border-2 rounded-xl px-4 py-2 cursor-pointer"
                             onClick={() =>
-                                handleCopyStatic(attestationId, zkProof)
+                                handleCopyStatic(docAttestationId || '', docZk)
                             }
                         >
                             Verify
@@ -250,28 +261,25 @@ export default function ProviderModal({
                     </div>
                     <div className="font-medium justify-center gap-x-1 pt-2 text-sm flex items-center">
                         <CiCircleCheck color="green" size={25} />
-                        <Image
-                            src={hcaImage}
-                            alt="hclHealthcare Image"
-                            width={40}
-                        />
+                        <RxAvatar size={20} />
+                        <div className="text-[12px]">Dr Shikha </div>
                         <div className=" ">
                             <Menu>
                                 <MenuButton className="inline-flex items-center gap-2 rounded-md  py-1.5 px-3 text-sm/6 font-semibold text-white shadow-inner shadow-white/10 focus:outline-none   data-[focus]:outline-1 data-[focus]:outline-white">
                                     <Image
                                         src={WldLogo}
                                         alt="wldCoinlogo"
-                                        width={20}
+                                        width={15}
                                     />
                                 </MenuButton>
 
                                 <MenuItems
                                     transition
                                     anchor="right start"
-                                    className="w-40 origin-top-right rounded-lg border bg-slate-200   text-xs text-black transition duration-100 ease-out [--anchor-gap:var(--spacing-1)] focus:outline-none data-[closed]:scale-95 data-[closed]:opacity-0"
+                                    className="w-52 origin-top-right rounded-lg border bg-slate-200   text-sm/6 text-black transition duration-100 ease-out [--anchor-gap:var(--spacing-1)] focus:outline-none data-[closed]:scale-95 data-[closed]:opacity-0"
                                 >
                                     <MenuItem>
-                                        <button className="group flex w-full  items-center  rounded-lg py-1 px-1 ">
+                                        <button className="group flex w-full  items-center gap-2 rounded-lg py-1 px-3 ">
                                             <Image
                                                 src={WldImg}
                                                 alt="hclHealthcare Image"
@@ -288,11 +296,12 @@ export default function ProviderModal({
             ) : (
                 <Button
                     onClick={open}
-                    className="bg-themelinear px-6 py-2 text-sm  rounded-lg font-semibold cursor-pointer text-white "
+                    className="w-full bg-themelinear px-6 py-2 text-sm  rounded-lg font-semibold cursor-pointer text-white "
                 >
-                    Create record
+                    Create
                 </Button>
             )}
+
             <Transition appear show={isOpen}>
                 <Dialog
                     open={isOpen}
@@ -330,150 +339,98 @@ export default function ProviderModal({
                                                 as="h3"
                                                 className=" font-medium text-black"
                                             >
-                                                Patient Details
+                                                Fill Details
                                             </DialogTitle>
                                             <div className="text-black pt-2">
                                                 <label
                                                     htmlFor="name"
                                                     className="text-sm"
                                                 >
-                                                    Name
+                                                    Medication*
                                                 </label>
                                                 <Input
                                                     type="text"
-                                                    id="name"
+                                                    id="medication"
                                                     className="mt-2"
-                                                    value={name}
-                                                    disabled
-                                                />
-                                            </div>
-                                            <div className="text-black pt-2">
-                                                <label
-                                                    htmlFor="name"
-                                                    className="text-sm"
-                                                >
-                                                    Age
-                                                </label>
-                                                <Input
-                                                    type="number"
-                                                    id="age"
-                                                    value={age}
-                                                    className="mt-2"
-                                                    disabled
-                                                />
-                                            </div>
-                                            <div className="text-black pt-2">
-                                                <label
-                                                    htmlFor="name"
-                                                    className="text-sm"
-                                                >
-                                                    Gender
-                                                </label>
-                                                <Input
-                                                    type="text"
-                                                    id="gender"
-                                                    value={gender}
-                                                    className="mt-2"
-                                                    disabled
-                                                />
-                                            </div>
-                                            <div className="text-black pt-2">
-                                                <label
-                                                    htmlFor="name"
-                                                    className="text-sm"
-                                                >
-                                                    Diagnosis*
-                                                </label>
-                                                <Input
-                                                    type="text"
-                                                    id="diagnosis"
-                                                    className="mt-2"
-                                                    value={diagnose}
+                                                    placeholder="Add Medication"
+                                                    value={
+                                                        doctorAnalysis.medication
+                                                    }
                                                     onChange={(e) => {
-                                                        setDiagnose(
-                                                            e.target.value
+                                                        dispatch(
+                                                            setDoctorAnalysis({
+                                                                ...doctorAnalysis,
+                                                                medication:
+                                                                    e.target
+                                                                        .value,
+                                                            })
                                                         );
                                                     }}
                                                 />
                                             </div>
-                                            <div className="text-black pt-4 flex items-center justify-between">
-                                                <div className="text-sm ">
-                                                    <label
-                                                        htmlFor="name"
-                                                        className="text-sm"
-                                                    >
-                                                        Blood Type*
-                                                    </label>
-                                                    <div className="pt-2">
-                                                        <Dropdown
-                                                            data={bloodType}
-                                                        />
-                                                    </div>
-                                                </div>
-                                                <div>
-                                                    <label
-                                                        htmlFor="name"
-                                                        className="text-sm"
-                                                    >
-                                                        Is insured*
-                                                    </label>
-                                                    <div className="flex items-center pt-2">
-                                                        <input
-                                                            type="radio"
-                                                            id="yes"
-                                                            name="insured"
-                                                            value="yes"
-                                                            checked={
-                                                                insured === true
-                                                            }
-                                                            onChange={() => {
-                                                                setInsured(
-                                                                    true
-                                                                );
-                                                            }}
-                                                        />
-
-                                                        <label
-                                                            htmlFor="html"
-                                                            className="pl-1"
-                                                        >
-                                                            Yes
-                                                        </label>
-                                                        <div className="pl-5">
-                                                            <input
-                                                                type="radio"
-                                                                id="no"
-                                                                name="insured"
-                                                                value="no"
-                                                                checked={
-                                                                    insured ===
-                                                                    false
-                                                                }
-                                                                onChange={() => {
-                                                                    setInsured(
-                                                                        false
-                                                                    );
-                                                                }}
-                                                            />
-                                                            <label
-                                                                htmlFor="html"
-                                                                className="pl-1"
-                                                            >
-                                                                No
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                            <div className="text-black pt-2">
+                                                <label
+                                                    htmlFor="name"
+                                                    className="text-sm"
+                                                >
+                                                    Dosage*
+                                                </label>
+                                                <Input
+                                                    type="text"
+                                                    id="dosage"
+                                                    className="mt-2"
+                                                    placeholder="Add Dosage"
+                                                    value={
+                                                        doctorAnalysis.dosage
+                                                    }
+                                                    onChange={(e) => {
+                                                        dispatch(
+                                                            setDoctorAnalysis({
+                                                                ...doctorAnalysis,
+                                                                dosage: e.target
+                                                                    .value,
+                                                            })
+                                                        );
+                                                    }}
+                                                />
+                                            </div>
+                                            <div className="text-black pt-2">
+                                                <label
+                                                    htmlFor="name"
+                                                    className="text-sm"
+                                                >
+                                                    Duration
+                                                </label>
+                                                <Input
+                                                    type="text"
+                                                    id="Duration"
+                                                    className="mt-2"
+                                                    placeholder="Add Duration"
+                                                    value={
+                                                        doctorAnalysis.duration
+                                                    }
+                                                    onChange={(e) => {
+                                                        dispatch(
+                                                            setDoctorAnalysis({
+                                                                ...doctorAnalysis,
+                                                                duration:
+                                                                    e.target
+                                                                        .value,
+                                                            })
+                                                        );
+                                                    }}
+                                                />
                                             </div>
                                             <div className="mt-4">
                                                 {loading ? (
                                                     <div className="text-center mt-10 bg-green-200 px-5 py-2  w-full rounded-lg">
-                                                        Generating record...
+                                                        Generating
+                                                        Prescription...
                                                     </div>
                                                 ) : (
                                                     <Button
                                                         onClick={() =>
-                                                            handleCreateRecord()
+                                                            handleCreatePrescription()
                                                         }
                                                         className={`inline-flex items-center mt-2 gap-2 rounded-md bg-gray-700 py-1.5 px-3 text-sm/6 font-semibold text-white shadow-inner shadow-white/10 focus:outline-none data-[hover]:bg-gray-600 data-[focus]:outline-1 data-[focus]:outline-white data-[open]:bg-gray-700`}
                                                     >
@@ -498,12 +455,12 @@ export default function ProviderModal({
                                                 as="h3"
                                                 className="flex items-center gap-x-2 font-medium text-black"
                                             >
-                                                Medical Record created
+                                                Prescription created
                                                 successfully
                                                 <a
                                                     target="_blank"
                                                     rel="noreferrer"
-                                                    href={`https://base-sepolia.easscan.org/attestation/view/${easID}`}
+                                                    href={`https://base-sepolia.easscan.org/attestation/view/${doctorEasID}`}
                                                 >
                                                     <RiExternalLinkLine
                                                         size={20}
@@ -511,7 +468,7 @@ export default function ProviderModal({
                                                 </a>
                                             </DialogTitle>
                                             <div className="flex items-center w-fit mt-5 bg-themelinear px-6 py-2 text-sm  rounded-lg font-semibold cursor-pointer text-white ">
-                                                Notify Doctor and Patient{'   '}
+                                                Notify Patient
                                                 <CiBellOn
                                                     size={20}
                                                     className="ml-2"
@@ -527,4 +484,6 @@ export default function ProviderModal({
             </Transition>
         </>
     );
-}
+};
+
+export default DoctorModal;
