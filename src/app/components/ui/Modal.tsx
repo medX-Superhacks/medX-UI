@@ -228,7 +228,7 @@ export default function Modal() {
                                                         target="_blank"
                                                         className="flex items-center gap-x-2"
                                                         rel="noreferrer"
-                                                        href={`https://base-sepolia.easscan.org/attestation/view/${blockLink}`}
+                                                        href={`https://base-sepolia.blockscout.com/tx/${blockLink}`}
                                                     >
                                                         Payment link
                                                         <TbExternalLink />

@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import { RxAvatar } from 'react-icons/rx';
 import MedxApp from '../../../public/assets/MedxApp.png';
+import Link from 'next/link';
 
 const doctorDetails = [
     {
@@ -96,7 +97,10 @@ const page = () => {
                                     </div>
                                     <div>
                                         {' '}
-                                        <button className="group/button relative inline-flex flex-col items-center justify-center overflow-hidden rounded-md bg-[#52D2CF] px-4 py-1.5 text-xs font-normal text-white transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-lg hover:shadow-[#7cc2c1] ">
+                                        <Link
+                                            href={'/doctor/shikha'}
+                                            className="group/button relative inline-flex flex-col items-center justify-center overflow-hidden rounded-md bg-[#52D2CF] px-4 py-1.5 text-xs font-normal text-white transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-lg hover:shadow-[#7cc2c1] "
+                                        >
                                             <span className="text-sm">
                                                 Book CLinic Visit
                                             </span>
@@ -106,7 +110,7 @@ const page = () => {
                                             <div className="absolute inset-0 flex h-full w-full justify-center [transform:skew(-13deg)_translateX(-100%)] group-hover/button:duration-1000 group-hover/button:[transform:skew(-13deg)_translateX(100%)]">
                                                 <div className="relative h-full w-8 bg-white/20" />
                                             </div>
-                                        </button>
+                                        </Link>
                                     </div>
                                     <div>
                                         <button className="group/button  relative overflow-hidden rounded-md border border-[#52D2CF] bg-white px-4 py-1 text-xs font-medium text-[#157D7A] transition-all duration-150 hover:border-[#1a3d3c] active:scale-95">
