@@ -39,6 +39,8 @@ const DoctorModal = ({
     duration,
     isCreated,
     setIsCreated,
+    docAttestationId,
+    docZk,
 }: {
     name: string;
     age: number;
@@ -51,6 +53,8 @@ const DoctorModal = ({
     duration: string;
     isCreated: boolean;
     setIsCreated: React.Dispatch<React.SetStateAction<boolean>>;
+    docAttestationId?: string;
+    docZk?: any;
 }) => {
     const signer = useSigner();
     const [isOpen, setIsOpen] = useState(false);
@@ -78,6 +82,28 @@ const DoctorModal = ({
         const data = { leaves, proof, proofFlags };
         navigator.clipboard
             .writeText(JSON.stringify(data))
+            .then(() => {
+                toast.success('Zk proof copied to clipboard');
+                toast.loading(
+                    'You will be redirected to the external link shortly.'
+                );
+                setTimeout(() => {
+                    toast.dismiss();
+                    window.open(
+                        `https://base-sepolia.easscan.org/attestation/view/${targetEasID}`,
+                        '_blank'
+                    );
+                }, 5000);
+            })
+            .catch((err) => {
+                toast.error('Failed to copy Zk proof to clipboard');
+                console.error('Error copying to clipboard:', err);
+            });
+    };
+    const handleCopyStatic = (attestationId: string, zkProof: any) => {
+        const targetEasID = attestationId;
+        navigator.clipboard
+            .writeText(JSON.stringify(zkProof))
             .then(() => {
                 toast.success('Zk proof copied to clipboard');
                 toast.loading(
@@ -153,6 +179,7 @@ const DoctorModal = ({
             });
         }
     };
+
     return (
         <>
             {isCreated ? (
@@ -189,9 +216,9 @@ const DoctorModal = ({
                         />
                         <div
                             className="border-2 rounded-xl px-4 py-2 cursor-pointer"
-                            // onClick={() =>
-                            //     handleCopyStatic(attestationId, zkProof)
-                            // }
+                            onClick={() =>
+                                handleCopyStatic(docAttestationId || '', docZk)
+                            }
                         >
                             Verify
                         </div>

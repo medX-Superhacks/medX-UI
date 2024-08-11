@@ -109,6 +109,7 @@ const DoctorTableComponent = () => {
                                     duration={invoice.duration}
                                     isCreated={isCreated}
                                     setIsCreated={setIsCreated}
+                                    docAttestationId={invoice.docAttestationId}
                                 />
                             </TableCell>
                             <TableCell className="text-right">
