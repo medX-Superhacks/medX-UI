@@ -19,8 +19,10 @@ const chains = [
     },
 ];
 const Payment = ({
+    setBlockLink,
     setCurrentState,
 }: {
+    setBlockLink: React.Dispatch<React.SetStateAction<string>>;
     setCurrentState: React.Dispatch<React.SetStateAction<number>>;
 }) => {
     const [loading, setLoading] = React.useState(false);
@@ -32,10 +34,12 @@ const Payment = ({
         // optional parameter that will wait for the transaction to be mined before returning
         waitForTxn: true,
         onSuccess: ({ hash, request }) => {
+            setBlockLink(hash);
             setLoading(false);
             setCurrentState(3);
         },
         onError: (error) => {
+            console.log(error);
             setLoading(false);
             toast.error('Something went wrong');
         },

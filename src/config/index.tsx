@@ -7,7 +7,7 @@ export const DOCTOR_PROFILE = [
         desc: 'Dr Shikha Goyal is a principal dentist at The Dental Roots, Gurgaon, providing patients with treatment involving all aspects of dentistry including Single Sitting Root Canal, Cosmetic Dentistry, Dental Implants, Rehabilitative and General Dental Care',
         language: 'English',
         education: 'Grand Canyon University, 2019',
-        fees: '500',
+        fees: '1 USDC',
         hospitals: 'Manipal Hospital',
     },
 ];
