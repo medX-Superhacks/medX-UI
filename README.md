@@ -59,7 +59,6 @@ medX is a decentralized healthcare platform designed to securely manage patient 
     - **Provider Verification**: Ensures that doctors and healthcare providers are authenticated during onboarding to maintain the trust and integrity of the platform.
       - **Code Reference**:
 
-
 ## 📜 Deployed Contracts
 
 ### **Medx Single Hop**
@@ -67,7 +66,7 @@ medX is a decentralized healthcare platform designed to securely manage patient 
 Here are the contract addresses for different testnets involved in the medx singlehop functionality:
 
 #### **Sepolia Testnet**
-- **Contract Address:** [0x98e7375398DE78FcFA685204D219A1571B888535](https://sepolia.blockscout.com/address/0x98e7375398DE78FcFA685204D219A1571B888535)
+- **Contract Address:** [0x98e7375398DE78FcFA685204D219A1571B888535](https://sepolia.etherscan.io/address/0x98e7375398DE78FcFA685204D219A1571B888535)
 
 #### **Base Sepolia Testnet**
 - **Contract Address:** [0xc1ca35997dd2c981c7ade0c73bd8628079fd0a4e](https://base-sepolia.blockscout.com/address/0xc1ca35997dd2c981c7ade0c73bd8628079fd0a4e)
@@ -76,7 +75,7 @@ Here are the contract addresses for different testnets involved in the medx sing
 - **Contract Address:** [0x309222b7833D3D0A59A8eBf9C64A5790bf43E2aA](https://optimism-sepolia.blockscout.com/address/0x309222b7833D3D0A59A8eBf9C64A5790bf43E2aA)
 
 #### **Polygon Amoy Testnet**
-- **Contract Address:** [0x7A409A3A36112bd6906a113d9612D7f7e1abd6d4](https://amoy.blockscout.com/address/0x7A409A3A36112bd6906a113d9612D7f7e1abd6d4)
+- **Contract Address:** [0x7A409A3A36112bd6906a113d9612D7f7e1abd6d4](https://amoy.polygonscan.com/address/0x7A409A3A36112bd6906a113d9612D7f7e1abd6d4)
 
 ---
 
@@ -88,16 +87,16 @@ The following are the **CCIP Multichain Hop Router** contract addresses deployed
 - **Router Address:** [0x273C282A9f1B45416CB9967611d431C116286ef9](https://base-sepolia.blockscout.com/address/0x273C282A9f1B45416CB9967611d431C116286ef9)
 
 #### **Sepolia Testnet**
-- **Router Address:** [0x96EE5fb7bc57C1f03D560Fcb1b8574ddC8bf5F37](https://sepolia.blockscout.com/address/0x96EE5fb7bc57C1f03D560Fcb1b8574ddC8bf5F37)
+- **Router Address:** [0x96EE5fb7bc57C1f03D560Fcb1b8574ddC8bf5F37](https://sepolia.etherscan.io/address/0x96EE5fb7bc57C1f03D560Fcb1b8574ddC8bf5F37)
 
 #### **Optimism Sepolia Testnet**
 - **Router Address:** [0xF99b791257ab50be7F235BC825E7d4B83942cf38](https://optimism-sepolia.blockscout.com/address/0xF99b791257ab50be7F235BC825E7d4B83942cf38)
 
 #### **Amoy Testnet**
-- **Router Address:** [0x40Fee4c8A3a66Dba113b881Dca0E4B2828b86BB7](https://amoy.blockscout.com/address/0x40Fee4c8A3a66Dba113b881Dca0E4B2828b86BB7)
+- **Router Address:** [0x40Fee4c8A3a66Dba113b881Dca0E4B2828b86BB7](https://amoy.polygonscan.com/address/0x40Fee4c8A3a66Dba113b881Dca0E4B2828b86BB7)
 
 #### **Arbitrum Sepolia Testnet**
-- **Router Address:** [0x309222b7833D3D0A59A8eBf9C64A5790bf43E2aA](https://sepolia-arbitrum.blockscout.com/address/0x309222b7833D3D0A59A8eBf9C64A5790bf43E2aA)
+- **Router Address:** [0x309222b7833D3D0A59A8eBf9C64A5790bf43E2aA](https://sepolia-explorer.arbitrum.io/address/0x309222b7833D3D0A59A8eBf9C64A5790bf43E2aA)
 
 ---
 
